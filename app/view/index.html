@@ -1,40 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users Data</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Users Data - Yummy Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/andyjaylogo.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
 </head>
+
 <body>
-    <h1>Users List</h1>
-    <div id="users"></div> <!-- Container to display users data -->
 
-    <script>
-        // Function to fetch users data from the server
-        async function fetchUsers() {
-            try {
-                const response = await fetch('/api/users');
-                if (!response.ok) throw new Error('Network response was not ok');
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1 class="sitename">Yummy</h1><span>.</span>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#users">Users</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
 
-                const users = await response.json();  // Parse JSON data
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Hero Section -->
+    <section id="hero" class="d-flex align-items-center" style="background: #f7f7f7; padding: 50px;">
+      <div class="container text-center" data-aos="fade-up">
+        <h1>Welcome to User Data Page</h1>
+        <p>Below is a dynamically generated list of users fetched from the server.</p>
+      </div>
+    </section>
 
-                // Select the users container
-                const usersContainer = document.getElementById('users');
-                usersContainer.innerHTML = '';  // Clear previous data if any
+    <!-- Users Section -->
+    <section id="users" class="users-section py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Users List</h2>
+        <div id="users" class="row"></div> <!-- Container to display users data -->
+      </div>
+    </section>
+  </main>
 
-                // Populate data
-                users.forEach(user => {
-                    const userDiv = document.createElement('div');
-                    userDiv.textContent = `ID: ${user.id}, Name: ${user.name}, Email: ${user.email}`;
-                    usersContainer.appendChild(userDiv);
-                });
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        }
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+    <div class="container">
+      <p>© Yummy Bootstrap Template. All Rights Reserved.</p>
+    </div>
+  </footer>
 
-        // Fetch and display users when the page loads
-        fetchUsers();
-    </script>
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- Custom Script to Fetch Users -->
+  <script>
+    async function fetchUsers() {
+      try {
+        const response = await fetch('/api/users');
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const users = await response.json();
+
+        const usersContainer = document.getElementById('users');
+        usersContainer.innerHTML = '';
+
+        users.forEach(user => {
+          const userCard = document.createElement('div');
+          userCard.className = 'col-md-4';
+          userCard.innerHTML = `
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Name: ${user.name}</h5>
+                <p class="card-text">Email: ${user.email}</p>
+                <p class="card-text"><small class="text-muted">ID: ${user.id}</small></p>
+              </div>
+            </div>
+          `;
+          usersContainer.appendChild(userCard);
+        });
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    }
+
+    fetchUsers();
+  </script>
 </body>
+
 </html>
