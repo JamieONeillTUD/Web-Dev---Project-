@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your Dashboard - Recipe Website</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Dashboard CSS -->
+    <link rel="stylesheet" href="/css/dashboard.css"> <!-- Correct path for CSS -->
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Recipe Website</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="text-center">
+        <div class="container">
+            <h1 class="display-4">Welcome, ${user.first_name}!</h1>
+            <p class="lead">This is your dashboard. Here you can view your recipes and your favorites.</p>
+        </div>
+    </header>
+
+    <!-- User Recipes Section -->
+    <section class="container py-5">
+        <h3>Your Recipes</h3>
+        <div class="row">
+            ${recipes.map(recipe => `
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${recipe.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${recipe.title}</h5>
+                            <p class="card-text">${recipe.description}</p>
+                            <a href="/recipe/${recipe.id}" class="btn btn-primary">View Recipe</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    </section>
+
+    <!-- User Favorites Section -->
+    <section class="container py-5">
+        <h3>Your Favorites</h3>
+        <div class="row">
+            ${favorites.map(fav => `
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${fav.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${fav.title}</h5>
+                            <p class="card-text">${fav.description}</p>
+                            <a href="/recipe/${fav.id}" class="btn btn-primary">View Recipe</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <p>&copy; 2024 Recipe Website | All Rights Reserved</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
