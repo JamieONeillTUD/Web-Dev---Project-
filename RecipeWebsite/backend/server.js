@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const app = express();
-const port = 3030;
+const port = 5050;
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
