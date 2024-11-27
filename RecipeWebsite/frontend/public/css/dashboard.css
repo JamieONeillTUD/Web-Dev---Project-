@@ -1,74 +1,39 @@
-/* Custom Styles for Dashboard */
+/* General styles */
 body {
-    background-color: #f4f6f9;
     font-family: Arial, sans-serif;
 }
 
-.navbar {
-    border-bottom: 2px solid #e3e3e3;
+/* Custom styles for favorite items */
+.list-group-item.favorite-item {
+    max-width: 300px; /* Smaller width */
+    padding: 10px; /* Compact padding */
+    margin: 5px auto; /* Add spacing between items */
+    border: 1px solid #ccc; /* Light border for visibility */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Subtle background color */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for better appearance */
 }
 
-header {
-    background: linear-gradient(to right, #007bff, #17a2b8);
-    color: white;
-    padding: 60px 0;
-    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
+.list-group-item.favorite-item h5 {
+    font-size: 1rem; /* Smaller title */
+    margin-bottom: 5px;
 }
 
-header h1 {
-    font-size: 3rem;
+.list-group-item.favorite-item p {
+    font-size: 0.9rem; /* Smaller description */
+    margin-bottom: 5px;
 }
 
-header p {
-    font-size: 1.2rem;
-}
-
-.card {
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-    font-weight: bold;
-}
-
-.card-text {
-    font-size: 1rem;
-    color: #555;
-}
-
-.list-group-item {
-    padding: 15px;
-    border: 1px solid #f1f1f1;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.footer {
-    background-color: #222;
-    color: white;
-    padding: 20px;
+.list-group-item.favorite-item .btn-danger {
+    width: 100%; /* Full-width button */
+    font-size: 0.8rem; /* Smaller button text */
+    padding: 5px; /* Compact button padding */
     text-align: center;
 }
 
-footer p {
-    font-size: 1rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .row {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .col-md-4 {
-        flex: 0 0 100%;
-    }
+/* Adjust overall layout for favorites */
+.list-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }

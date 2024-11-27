@@ -161,6 +161,22 @@ app.get('/user/dashboard', (req, res) => {
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <title>Your Dashboard - Recipe Website</title>
                         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+                        <style>
+                            .list-group-item {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 10px;
+                                margin: 5px 0;
+                                border: 1px solid #ccc;
+                                border-radius: 5px;
+                                background-color: #f9f9f9;
+                            }
+                            .btn-danger {
+                                font-size: 0.8rem;
+                                padding: 5px 10px;
+                            }
+                        </style>
                     </head>
                     <body>
                         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -195,9 +211,12 @@ app.get('/user/dashboard', (req, res) => {
                             <h3>Your Favorites</h3>
                             <ul class="list-group">
                                 ${favorites.map(fav => `
-                                    <li class="list-group-item">
-                                        <h5>${fav.title}</h5>
-                                        <p>${fav.description}</p>
+                                    <li class="list-group-item" id="favorite-${fav.id}">
+                                        <div>
+                                            <h5>${fav.title}</h5>
+                                            <p>${fav.description}</p>
+                                        </div>
+                                        <button class="btn btn-danger btn-sm" onclick="removeFromFavorites(${fav.id})">Remove</button>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -205,6 +224,26 @@ app.get('/user/dashboard', (req, res) => {
                         <footer class="bg-dark text-white text-center py-4">
                             <p>&copy; 2024 Recipe Website | All Rights Reserved</p>
                         </footer>
+                        <script>
+                            async function removeFromFavorites(recipeId) {
+                                try {
+                                    const response = await fetch(\`/recipes/\${recipeId}/favorites\`, {
+                                        method: 'DELETE',
+                                        headers: { 'Content-Type': 'application/json' },
+                                    });
+
+                                    if (response.ok) {
+                                        alert('Recipe removed from favorites!');
+                                        document.getElementById(\`favorite-\${recipeId}\`).remove();
+                                    } else {
+                                        alert('Failed to remove favorite. Please try again.');
+                                    }
+                                } catch (error) {
+                                    console.error('Error removing favorite:', error);
+                                    alert('Error removing favorite. Please try again.');
+                                }
+                            }
+                        </script>
                     </body>
                     </html>
                 `);
@@ -212,6 +251,7 @@ app.get('/user/dashboard', (req, res) => {
         });
     });
 });
+
 
 // Logout route
 app.get('/logout', (req, res) => {
