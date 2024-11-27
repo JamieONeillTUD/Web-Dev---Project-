@@ -34,6 +34,11 @@ db.connect((err) => {
     console.log('Database connected successfully!');
 });
 
+const recipesRouter = require('./routes/recipes');
+
+// Use the recipes router
+app.use('/recipes', recipesRouter);
+
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
@@ -224,3 +229,4 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+

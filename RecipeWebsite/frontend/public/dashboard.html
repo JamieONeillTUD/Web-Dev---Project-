@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom Dashboard CSS -->
-    <link rel="stylesheet" href="/css/dashboard.css"> <!-- Correct path for CSS -->
+    <link rel="stylesheet" href="/css/dashboard.css"> <!-- Adjust path as needed -->
 </head>
 
 <body>
@@ -37,7 +37,7 @@
     <!-- Hero Section -->
     <header class="text-center">
         <div class="container">
-            <h1 class="display-4">Welcome, ${user.first_name}!</h1>
+            <h1 id="user-name" class="display-4">Welcome!</h1> <!-- Dynamically set user name -->
             <p class="lead">This is your dashboard. Here you can view your recipes and your favorites.</p>
         </div>
     </header>
@@ -45,38 +45,16 @@
     <!-- User Recipes Section -->
     <section class="container py-5">
         <h3>Your Recipes</h3>
-        <div class="row">
-            ${recipes.map(recipe => `
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${recipe.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">${recipe.title}</h5>
-                            <p class="card-text">${recipe.description}</p>
-                            <a href="/recipe/${recipe.id}" class="btn btn-primary">View Recipe</a>
-                        </div>
-                    </div>
-                </div>
-            `).join('')}
+        <div id="recipes-list" class="row">
+            <!-- User recipes will be dynamically added here -->
         </div>
     </section>
 
     <!-- User Favorites Section -->
     <section class="container py-5">
         <h3>Your Favorites</h3>
-        <div class="row">
-            ${favorites.map(fav => `
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${fav.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">${fav.title}</h5>
-                            <p class="card-text">${fav.description}</p>
-                            <a href="/recipe/${fav.id}" class="btn btn-primary">View Recipe</a>
-                        </div>
-                    </div>
-                </div>
-            `).join('')}
+        <div id="favorites-list" class="row">
+            <!-- Favorite recipes will be dynamically added here -->
         </div>
     </section>
 
@@ -87,6 +65,60 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Fetch dashboard data and populate the page
+        async function fetchDashboard() {
+            try {
+                const response = await fetch('/user/dashboard'); // API call to get dashboard data
+                if (!response.ok) {
+                    throw new Error('Failed to fetch dashboard data');
+                }
+
+                const data = await response.json(); // Parse JSON response
+
+                // Display user info
+                const userNameElement = document.getElementById('user-name');
+                userNameElement.textContent = `Welcome, ${data.user.first_name}!`;
+
+                // Display user's recipes
+                const recipesListElement = document.getElementById('recipes-list');
+                recipesListElement.innerHTML = data.recipes.map(recipe => `
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${recipe.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.title}</h5>
+                                <p class="card-text">${recipe.description}</p>
+                                <a href="/recipe/${recipe.id}" class="btn btn-primary">View Recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Display user's favorite recipes
+                const favoritesListElement = document.getElementById('favorites-list');
+                favoritesListElement.innerHTML = data.favorites.map(fav => `
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="/images/recipe-image-placeholder.jpg" class="card-img-top" alt="${fav.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${fav.title}</h5>
+                                <p class="card-text">${fav.description}</p>
+                                <a href="/recipe/${fav.id}" class="btn btn-primary">View Recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading dashboard:', error); // Log any errors
+                alert('Failed to load dashboard data'); // Notify the user of an error
+            }
+        }
+
+        // Call the function to fetch and display data when the page loads
+        fetchDashboard();
+    </script>
 </body>
 
 </html>

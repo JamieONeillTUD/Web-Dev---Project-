@@ -79,3 +79,28 @@ exports.deleteRecipe = async (req, res) => {
         res.status(500).json({ error: 'Error deleting recipe' });
     }
 };
+
+
+// Get user favorites
+exports.getFavorites = async (req, res) => {
+    const userId = req.session.userId; // Get the logged-in user's ID from the session
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' }); // User must be logged in
+    }
+
+    try {
+        const query = `
+            SELECT r.* 
+            FROM recipes r
+            JOIN favorites f ON r.id = f.recipe_id
+            WHERE f.user_id = ?
+        `;
+        const [favorites] = await db.query(query, [userId]); // Fetch favorites for the user
+        res.status(200).json(favorites); // Return favorites as JSON
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+        res.status(500).json({ error: 'Error fetching favorites' }); // Handle errors gracefully
+    }
+};
+
