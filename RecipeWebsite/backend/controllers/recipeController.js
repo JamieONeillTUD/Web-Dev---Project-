@@ -80,6 +80,30 @@ exports.deleteRecipe = async (req, res) => {
     }
 };
 
+// Add a recipe to favorites
+// Route handles the POST request when the user clicks the "Add to Favorites" button
+exports.addFavorite = async (req, res) => {
+    const recipeId = req.params.id; // Get the recipe ID from the URL
+    const userId = req.session.userId; // Get the logged-in user's ID from the session
+
+    if (!userId) {
+        return res.status(401).send('Unauthorized'); // User must be logged in
+    }
+
+    try {
+        const query = 'INSERT INTO favorites (user_id, recipe_id) VALUES (?, ?)';
+        await db.query(query, [userId, recipeId]); // Insert the favorite into the database
+        res.status(200).json({ message: 'Favorite added successfully.' }); // Respond with success
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(400).json({ message: 'Recipe is already in favorites.' });
+        } else {
+            console.error('Error adding to favorites:', error.message);
+            res.status(500).json({ message: `Error adding to favorites: ${error.message}` });
+        }
+    }
+};
+
 
 // Get user favorites
 exports.getFavorites = async (req, res) => {
@@ -103,4 +127,29 @@ exports.getFavorites = async (req, res) => {
         res.status(500).json({ error: 'Error fetching favorites' }); // Handle errors gracefully
     }
 };
+
+// Remove a recipe from favorites
+exports.removeFavorite = async (req, res) => {
+    const recipeId = req.params.id; // Get the recipe ID from the URL
+    const userId = req.session.userId; // Ensure the user is logged in via session
+
+    if (!userId) {
+        return res.status(401).send('Unauthorized');
+    }
+
+    try {
+        const query = 'DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?';
+        const [result] = await db.query(query, [userId, recipeId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Favorite not found.');
+        }
+
+        res.status(200).send('Favorite removed successfully.');
+    } catch (error) {
+        console.error('Error removing favorite:', error.message);
+        res.status(500).send('Error removing favorite.');
+    }
+};
+
 
