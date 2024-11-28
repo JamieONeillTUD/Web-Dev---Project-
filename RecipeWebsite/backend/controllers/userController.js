@@ -38,3 +38,100 @@ exports.getDashboard = async (req, res) => {
     }
 };
 
+exports.getUserDetails = async (req, res) => {
+    const userId = req.session.userId; // Get user ID from the session
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' }); // Ensure the user is logged in
+    }
+
+    try {
+        const query = `
+            SELECT first_name, last_name, email, username, phone_number, date_of_birth, eircode
+            FROM users
+            WHERE id = ?
+        `;
+        const [userDetails] = await db.query(query, [userId]);
+
+        if (!userDetails.length) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(userDetails[0]); // Send user details as JSON
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ message: 'Error fetching user details' });
+    }
+};
+
+// Fetch user profile details
+exports.getProfile = (req, res) => {
+    const userId = req.session.userId;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    db.query('SELECT first_name, last_name, email, username, phone_number, date_of_birth, eircode FROM users WHERE id = ?', 
+        [userId], 
+        (err, results) => {
+            if (err) {
+                console.error('Error fetching user profile:', err);
+                return res.status(500).json({ error: 'Error fetching user profile' });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.status(200).json(results[0]);
+        }
+    );
+};
+
+// Update user profile
+exports.updateProfile = async (req, res) => {
+    const userId = req.session.userId;
+    const { first_name, last_name, email, phone_number, date_of_birth, eircode } = req.body;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    try {
+        const query = `
+            UPDATE users
+            SET first_name = ?, last_name = ?, email = ?, phone_number = ?, date_of_birth = ?, eircode = ?
+            WHERE id = ?
+        `;
+        await db.query(query, [first_name, last_name, email, phone_number, date_of_birth, eircode, userId]);
+        res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Failed to update profile' });
+    }
+};
+
+
+
+// Fetch user details
+exports.getUserDetails = async (req, res) => {
+    const userId = req.session.userId;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    try {
+        const [user] = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
+        if (!user.length) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user[0]); // Send user data as JSON
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ message: 'Failed to load user details' });
+    }
+};
+
+

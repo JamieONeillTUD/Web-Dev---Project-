@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <nav>
+        <a href="/user/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
+    <h1>Edit Profile</h1>
+    <form id="edit-profile-form">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number">
+        
+        <label for="date_of_birth">Date of Birth:</label>
+        <input type="date" id="date_of_birth" name="date_of_birth">
+        
+        <label for="eircode">Eircode:</label>
+        <input type="text" id="eircode" name="eircode">
+        
+        <button type="submit">Save Changes</button>
+    </form>
+    <script src="/js/edit-profile.js"></script>
+</body>
+</html>

@@ -9,6 +9,8 @@ const port = 5050;
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.json()); // Middleware for JSON parsing
+
 // Use express-session to manage sessions
 app.use(session({
     secret: 'your-secret-key',
@@ -191,6 +193,9 @@ app.get('/user/dashboard', (req, res) => {
                                             <a class="nav-link" href="/user/dashboard">Dashboard</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link" href="/user/edit-profile">Edit Profile</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link" href="/logout">Logout</a>
                                         </li>
                                     </ul>
@@ -252,6 +257,10 @@ app.get('/user/dashboard', (req, res) => {
     });
 });
 
+const userRouter = require('./routes/user'); // Import the user routes
+app.use('/user', userRouter); // Mount user routes under the "/user" path
+
+
 
 // Logout route
 app.get('/logout', (req, res) => {
@@ -269,4 +278,3 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
-
