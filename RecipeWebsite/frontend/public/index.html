@@ -55,10 +55,9 @@
     <!-- Recipe Search Section -->
     <section class="container py-5">
         <h2 class="text-center mb-4">Find Your Next Recipe</h2>
-        <form action="search.html" method="GET" class="d-flex justify-content-center">
-            <input type="text" class="form-control me-2" name="search" placeholder="Search for recipes..." required>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <input id="searchBar" type="text" placeholder="Search recipes..." />
+        <button onclick="searchRecipes()">Search</button>
+        <div id="recipeResults"></div>        
     </section>
 
     <!-- Featured Recipes Section -->

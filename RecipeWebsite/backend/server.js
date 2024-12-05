@@ -39,6 +39,10 @@ db.connect((err) => {
 const recipesRouter = require('./routes/recipes');
 app.use('/recipes', recipesRouter);
 
+// external recipes
+const externalRecipesRouter = require('./routes/externalRecipes');
+app.use('/api', externalRecipesRouter); // Mount the router
+
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 

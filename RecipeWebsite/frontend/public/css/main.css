@@ -168,3 +168,20 @@ footer p {
         flex: 0 0 100%;
     }
 }
+
+.recipe-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.recipe-card img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.recipe-card h3 {
+    font-size: 1.2rem;
+}
