@@ -279,6 +279,64 @@ app.post('/user/update-profile', (req, res) => {
     );
 });
 
+// search route that handles searching for a recipe
+app.get('/search', (req, res) => {
+    const searchQuery = req.query.query;
+
+    const sqlQuery = `
+        SELECT * FROM recipes 
+        WHERE title LIKE ? OR description LIKE ?`;
+
+    db.query(sqlQuery, [`%${searchQuery}%`, `%${searchQuery}%`], (err, results) => {
+        if (err) {
+            console.error('Error fetching recipes:', err.message);
+            return res.status(500).send('Error fetching recipes');
+        }
+
+        if (results.length === 0) {
+            res.send(`
+                <div class="container py-5">
+                    <h1 class="text-center">No Results Found for "${searchQuery}"</h1>
+                    <p class="text-center">Try searching for something else.</p>
+                </div>
+            `);
+        } else {
+            // pass the search results to the search results page
+            res.send(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Search Results</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+                <body>
+                    <div class="container py-5">
+                        <h1 class="text-center mb-4">Search Results for "${searchQuery}"</h1>
+                        <div class="row">
+                            ${results.map(recipe => `
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <img src="/images/${recipe.image || 'default.jpg'}" class="card-img-top" alt="${recipe.title}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${recipe.title}</h5>
+                                            <p class="card-text">${recipe.description}</p>
+                                            <a href="/recipe.html?id=${recipe.id}" class="btn btn-primary">View Recipe</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+    });
+});
+
+
 // Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
