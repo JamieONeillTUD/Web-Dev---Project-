@@ -47,8 +47,7 @@ function displayRecipes(recipes) {
         <div class="recipe-card">
             <h3>${recipe.strMeal}</h3>
             <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
-            <p>${recipe.strInstructions.substring(0, 100)}...</p>
-            <a href="${recipe.strSource}" target="_blank">View Full Recipe</a>
+            <button onclick="viewRecipeDetails('${recipe.idMeal}')">View Recipe Details</button>
         </div>
     `).join('');
 }
@@ -58,3 +57,35 @@ document.getElementById('searchBarButton').addEventListener('click', () => {
     const query = document.getElementById('searchBar').value;
     searchRecipes(query);
 });
+
+async function viewRecipeDetails(recipeId) {
+    try {
+        const response = await fetch(`/api/recipe/${recipeId}`);
+        if (!response.ok) throw new Error('Failed to fetch recipe details');
+
+        const recipe = await response.json();
+        displayRecipeDetails(recipe); // Function to display details on your webpage
+    } catch (error) {
+        console.error('Error fetching recipe details:', error);
+        alert('Failed to load recipe details. Please try again.');
+    }
+}
+
+function displayRecipeDetails(recipe) {
+    const container = document.getElementById('recipeDetails');
+    container.innerHTML = `
+        <div class="recipe-details">
+            <h2>${recipe.strMeal}</h2>
+            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
+            <h3>Ingredients</h3>
+            <ul>
+                ${Object.keys(recipe)
+                    .filter(key => key.startsWith('strIngredient') && recipe[key])
+                    .map(key => `<li>${recipe[key]} - ${recipe[`strMeasure${key.match(/\d+/)[0]}`]}</li>`)
+                    .join('')}
+            </ul>
+            <h3>Instructions</h3>
+            <p>${recipe.strInstructions}</p>
+        </div>
+    `;
+}
