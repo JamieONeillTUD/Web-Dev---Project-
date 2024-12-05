@@ -38,6 +38,7 @@ exports.getDashboard = async (req, res) => {
     }
 };
 
+// Get user details (Basic profile info)
 exports.getUserDetails = async (req, res) => {
     const userId = req.session.userId; // Get user ID from the session
 
@@ -112,9 +113,7 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
-
-
-// Fetch user details
+// Fetch user details (Duplicate function, might be a mistake)
 exports.getUserDetails = async (req, res) => {
     const userId = req.session.userId;
 
@@ -133,5 +132,3 @@ exports.getUserDetails = async (req, res) => {
         res.status(500).json({ message: 'Failed to load user details' });
     }
 };
-
-

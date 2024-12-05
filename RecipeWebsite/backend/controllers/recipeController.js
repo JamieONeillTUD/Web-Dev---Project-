@@ -81,7 +81,6 @@ exports.deleteRecipe = async (req, res) => {
 };
 
 // Add a recipe to favorites
-// Route handles the POST request when the user clicks the "Add to Favorites" button
 exports.addFavorite = async (req, res) => {
     const recipeId = req.params.id; // Get the recipe ID from the URL
     const userId = req.session.userId; // Get the logged-in user's ID from the session
@@ -103,7 +102,6 @@ exports.addFavorite = async (req, res) => {
         }
     }
 };
-
 
 // Get user favorites
 exports.getFavorites = async (req, res) => {
@@ -151,5 +149,3 @@ exports.removeFavorite = async (req, res) => {
         res.status(500).send('Error removing favorite.');
     }
 };
-
-

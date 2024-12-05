@@ -1,30 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const recipeController = require('../controllers/recipeController');
-const db = require('../db/connection'); 
+const requireAuth = require('../middleware/requireAuth'); // Importing the requireAuth middleware
 
-// Get all recipes
+// Get all recipes (Public route, no authentication required)
 router.get('/', recipeController.getAllRecipes);
 
-// Get a single recipe by id
+// Get a single recipe by id (Public route, no authentication required)
 router.get('/:id', recipeController.getRecipeById);
 
-// Create a new recipe
-router.post('/add', recipeController.addRecipe);
+// Create a new recipe (Protected route, requires authentication)
+router.post('/add', requireAuth, recipeController.addRecipe);
 
-// Update a recipe
-router.put('/:id', recipeController.updateRecipe);
+// Update a recipe (Protected route, requires authentication)
+router.put('/:id', requireAuth, recipeController.updateRecipe);
 
-// Delete a recipe
-router.delete('/:id', recipeController.deleteRecipe);
+// Delete a recipe (Protected route, requires authentication)
+router.delete('/:id', requireAuth, recipeController.deleteRecipe);
 
-// Add a recipe to favorites
-router.post('/:id/favorites', recipeController.addFavorite);
+// Add a recipe to favorites (Protected route, requires authentication)
+router.post('/:id/favorites', requireAuth, recipeController.addFavorite);
 
-router.get('/favorites', recipeController.getFavorites);
+// Get all user favorites (Protected route, requires authentication)
+router.get('/favorites', requireAuth, recipeController.getFavorites);
 
-// DELETE: Remove a favorite
-router.delete('/:id/favorites', recipeController.removeFavorite);
-
+// DELETE: Remove a favorite (Protected route, requires authentication)
+router.delete('/:id/favorites', requireAuth, recipeController.removeFavorite);
 
 module.exports = router;
