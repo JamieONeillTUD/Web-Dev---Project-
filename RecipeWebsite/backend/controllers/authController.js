@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 const db = require('../db/connection');
 
 // User registration
