@@ -44,13 +44,15 @@ VALUES
  'Flour, milk, eggs, sugar, baking powder, salt', 
  '1. Mix dry ingredients. 2. Add wet ingredients and whisk. 3. Cook on a hot griddle. 4. Serve with syrup.');
 
+-- New table for adding external recipes to favourites
 CREATE TABLE favorites (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    recipe_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE
+    recipe_id VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    UNIQUE KEY unique_favorite (user_id, recipe_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Insert sample favorites
