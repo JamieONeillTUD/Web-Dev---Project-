@@ -52,13 +52,26 @@
         </div>
     </header>
 
-    <!-- Recipe Search Section -->
-    <section class="container py-5">
-        <h2 class="text-center mb-4">Find Your Next Recipe</h2>
-        <input id="searchBar" type="text" placeholder="Search recipes..." />
-        <button onclick="searchRecipes()">Search</button>
-        <div id="recipeResults"></div>        
-    </section>
+<!-- Recipe Search Section -->
+<section class="container py-5">
+    <h2 class="text-center mb-4">Find Your Next Recipe</h2>
+    <div class="d-flex justify-content-center">
+        <!-- Use the old structure but keep the new functionality -->
+        <input 
+            type="text" 
+            id="searchBar" 
+            class="form-control me-2" 
+            style="max-width: 1200px;" 
+            placeholder="Search for recipes..." 
+            required
+        >
+        <button 
+            id="searchBarButton" 
+            class="btn btn-primary"
+        >Search</button>
+    </div>
+</section>
+
 
         <!-- Results Section -->
         <div class="container">
