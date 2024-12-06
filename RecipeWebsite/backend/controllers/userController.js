@@ -1,6 +1,7 @@
 const db = require('../db/connection');
 
 // Get user's dashboard (user data, their recipes, and their favorites)
+// Get user's dashboard (user data, their recipes, and their favorites)
 exports.getDashboard = async (req, res) => {
     const userId = req.session.userId; // Ensure user ID is in the session
 
@@ -18,12 +19,11 @@ exports.getDashboard = async (req, res) => {
         // Fetch user's own recipes
         const [userRecipes] = await db.query('SELECT * FROM recipes WHERE user_id = ?', [userId]);
 
-        // Fetch user's favorite recipes
+        // Fetch user's favorite recipes directly from the favorites table
         const [favorites] = await db.query(`
-            SELECT r.* 
-            FROM recipes r
-            JOIN favorites f ON r.id = f.recipe_id
-            WHERE f.user_id = ?
+            SELECT recipe_id, title, image
+            FROM favorites
+            WHERE user_id = ?
         `, [userId]);
 
         // Respond with all dashboard data
@@ -37,6 +37,7 @@ exports.getDashboard = async (req, res) => {
         res.status(500).json({ error: 'Error fetching dashboard' });
     }
 };
+
 
 exports.getUserDetails = async (req, res) => {
     const userId = req.session.userId; // Get user ID from the session

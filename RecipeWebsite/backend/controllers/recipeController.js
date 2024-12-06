@@ -125,10 +125,9 @@ exports.getFavorites = async (req, res) => {
 
     try {
         const query = `
-            SELECT r.* 
-            FROM recipes r
-            JOIN favorites f ON r.id = f.recipe_id
-            WHERE f.user_id = ?
+            SELECT recipe_id, title, image 
+            FROM favorites 
+            WHERE user_id = ?
         `;
         const [favorites] = await db.query(query, [userId]);
         res.status(200).json(favorites);
@@ -137,6 +136,7 @@ exports.getFavorites = async (req, res) => {
         res.status(500).json({ error: 'Error fetching favorites' });
     }
 };
+
 
 // Remove a recipe from favorites
 exports.removeFavorite = async (req, res) => {

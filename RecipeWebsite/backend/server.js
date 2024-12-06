@@ -133,6 +133,7 @@ app.post('/login', (req, res) => {
 });
 
 // Serve the dashboard page if the user is logged in
+// Serve the dashboard page if the user is logged in
 app.get('/user/dashboard', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login.html'); // Redirect to login if not logged in
@@ -158,132 +159,137 @@ app.get('/user/dashboard', (req, res) => {
                 return res.status(500).send('Error fetching recipes');
             }
 
-            db.query('SELECT r.* FROM recipes r JOIN favorites f ON r.id = f.recipe_id WHERE f.user_id = ?', [userId], (err, favorites) => {
-                if (err) {
-                    console.error('Error fetching favorites:', err.message);
-                    return res.status(500).send('Error fetching favorites');
-                }
+            // Fetch favorites from the "favorites" table with title and image
+            db.query(
+                'SELECT title, image FROM favorites WHERE user_id = ?',
+                [userId],
+                (err, favorites) => {
+                    if (err) {
+                        console.error('Error fetching favorites:', err.message);
+                        return res.status(500).send('Error fetching favorites');
+                    }
 
-                // Render dashboard
-                res.send(`
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Your Dashboard - Recipe Website</title>
-                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-                        <style>
-                            .list-group-item {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                padding: 10px;
-                                margin: 5px 0;
-                                border: 1px solid #ccc;
-                                border-radius: 5px;
-                                background-color: #f9f9f9;
-                            }
-                            .btn-danger {
-                                font-size: 0.8rem;
-                                padding: 5px 10px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                            <div class="container-fluid">
-                                <a class="navbar-brand" href="/">Recipe Website</a>
-                                <div class="collapse navbar-collapse" id="navbarNav">
-                                    <ul class="navbar-nav ms-auto">
-                                        <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="/recipes/add">Create Recipe</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                                    </ul>
+                    // Render dashboard
+                    res.send(`
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Your Dashboard - Recipe Website</title>
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+                            <style>
+                                .list-group-item {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    padding: 10px;
+                                    margin: 5px 0;
+                                    border: 1px solid #ccc;
+                                    border-radius: 5px;
+                                    background-color: #f9f9f9;
+                                }
+                                .btn-danger {
+                                    font-size: 0.8rem;
+                                    padding: 5px 10px;
+                                }
+                                .favorite-item {
+                                    display: flex;
+                                    align-items: center;
+                                    margin: 10px 0;
+                                }
+                                .favorite-item img {
+                                    width: 50px;
+                                    height: 50px;
+                                    margin-right: 10px;
+                                    border-radius: 5px;
+                                    object-fit: cover;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="/">Recipe Website</a>
+                                    <div class="collapse navbar-collapse" id="navbarNav">
+                                        <ul class="navbar-nav ms-auto">
+                                            <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/recipes/add">Create Recipe</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
+                            </nav>
+                            <div class="container py-5">
+                                <h1 class="display-4">Welcome, ${user.first_name}!</h1>
+                                <h3>Edit Profile</h3>
+                                <form id="updateProfileForm">
+                                    <div class="mb-3">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="${user.first_name}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="${user.last_name}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="${user.email}">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                                </form>
+                                <h3>Your Recipes</h3>
+                                <ul class="list-group">
+                                    ${recipes.map(recipe => `
+                                        <li class="list-group-item">
+                                            <h5>${recipe.title}</h5>
+                                            <p>${recipe.description}</p>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                                <h3>Your Favorites</h3>
+                                <ul class="list-group">
+                                    ${favorites.map(fav => `
+                                        <li class="list-group-item favorite-item">
+                                            <img src="${fav.image}" alt="${fav.title}" />
+                                            <div>
+                                                <h5>${fav.title}</h5>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
                             </div>
-                        </nav>
-                        <div class="container py-5">
-                            <h1 class="display-4">Welcome, ${user.first_name}!</h1>
-                            <h3>Edit Profile</h3>
-                            <form id="updateProfileForm">
-                                <div class="mb-3">
-                                    <label for="first_name" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="${user.first_name}">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="last_name" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" value="${user.last_name}">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="${user.email}">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Update Profile</button>
-                            </form>
-                            <h3>Your Recipes</h3>
-                            <ul class="list-group">
-                                ${recipes.map(recipe => `
-                                    <li class="list-group-item">
-                                        <h5>${recipe.title}</h5>
-                                        <p>${recipe.description}</p>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                            <h3>Your Favorites</h3>
-                            <ul class="list-group">
-                                ${favorites.map(fav => `
-                                    <li class="list-group-item" id="favorite-${fav.id}">
-                                        <div>
-                                            <h5>${fav.title}</h5>
-                                            <p>${fav.description}</p>
-                                        </div>
-                                        <button class="btn btn-danger btn-sm" onclick="removeFromFavorites(${fav.id})">Remove</button>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        </div>
-                        <script>
-                            async function removeFromFavorites(recipeId) {
-                                try {
-                                    const response = await fetch(\`/recipes/\${recipeId}/favorites\`, { method: 'DELETE' });
-                                    if (response.ok) {
-                                        alert('Recipe removed from favorites!');
-                                        document.getElementById(\`favorite-\${recipeId}\`).remove();
-                                    } else {
-                                        alert('Failed to remove favorite.');
+                            <script>
+                                document.getElementById('updateProfileForm').addEventListener('submit', async (event) => {
+                                    event.preventDefault();
+                                    const formData = new FormData(event.target);
+                                    const data = Object.fromEntries(formData.entries());
+                                    try {
+                                        const response = await fetch('/user/update-profile', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify(data)
+                                        });
+                                        if (response.ok) {
+                                            alert('Profile updated successfully!');
+                                        } else {
+                                            alert('Failed to update profile.');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error:', error);
                                     }
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                }
-                            }
-                            document.getElementById('updateProfileForm').addEventListener('submit', async (event) => {
-                                event.preventDefault();
-                                const formData = new FormData(event.target);
-                                const data = Object.fromEntries(formData.entries());
-                                try {
-                                    const response = await fetch('/user/update-profile', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify(data)
-                                    });
-                                    if (response.ok) {
-                                        alert('Profile updated successfully!');
-                                    } else {
-                                        alert('Failed to update profile.');
-                                    }
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                }
-                            });
-                        </script>
-                    </body>
-                    </html>
-                `);
-            });
+                                });
+                            </script>
+                        </body>
+                        </html>
+                    `);
+                }
+            );
         });
     });
 });
+
+
 
 
 
