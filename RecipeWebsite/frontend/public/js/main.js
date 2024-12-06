@@ -41,8 +41,24 @@ async function searchRecipes() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch and display default recipes on page load
+    fetch('/api/recipes') // No query provided for default recipes
+        .then(response => response.json())
+        .then(recipes => displayRecipes(recipes))
+        .catch(error => console.error('Error fetching default recipes:', error));
+});
+
 function displayRecipes(recipes) {
     const container = document.getElementById('recipeResults');
+    container.innerHTML = recipes.map(recipe => `
+        <div class="recipe-card">
+            <h3>${recipe.strMeal}</h3>
+            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
+            <p>${recipe.strInstructions.substring(0, 100)}...</p>
+            <a href="/recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
+        </div>
+    `).join('');
     container.innerHTML = `
         <section class="container py-5">
             <h2 class="text-center mb-4">Search Results</h2>
@@ -63,6 +79,7 @@ function displayRecipes(recipes) {
         </section>
     `;
 }
+
 
 
 

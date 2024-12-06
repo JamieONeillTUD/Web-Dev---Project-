@@ -2,14 +2,12 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
+// Fetch recipes based on a search query or fetch default recipes
 router.get('/recipes', async (req, res) => {
-    const query = req.query.q; // Get the search query from the request
-    if (!query) {
-        return res.status(400).json({ message: 'Query is required' });
-    }
-
+    const query = req.query.q || ''; // Default to empty query for fetching all recipes
     try {
-        const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
+        const response = await axios.get(url);
         if (response.data.meals) {
             res.json(response.data.meals); // Return recipes to the client
         } else {
