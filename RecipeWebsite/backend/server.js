@@ -178,6 +178,7 @@ app.get('/user/dashboard', (req, res) => {
                                 <div class="collapse navbar-collapse" id="navbarNav">
                                     <ul class="navbar-nav ms-auto">
                                         <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="/recipes/add">Create Recipe</a></li>
                                         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                                     </ul>
                                 </div>
@@ -264,6 +265,39 @@ app.get('/user/dashboard', (req, res) => {
         });
     });
 });
+
+// Serve Create Recipe page (GET)
+app.get('/recipes/add', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login.html'); // Ensure the user is logged in before they can access this page
+    }
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'create-recipe.html')); // Send the create recipe page
+});
+
+
+// Create Recipe (POST)
+app.post('/recipes/add', (req, res) => {
+    const { title, description, ingredients, instructions } = req.body;
+    const userId = req.session.userId; // Make sure the user is logged in
+
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized, please log in' });
+    }
+
+    if (!title || !description || !ingredients || !instructions) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [userId, title, description, ingredients, instructions], (err, result) => {
+        if (err) {
+            console.error('Error adding recipe:', err);
+            return res.status(500).json({ error: 'Error adding recipe' });
+        }
+        res.status(201).json({ message: 'Recipe added successfully', recipeId: result.insertId });
+    });
+});
+
 
 // Update user profile
 app.post('/user/update-profile', (req, res) => {

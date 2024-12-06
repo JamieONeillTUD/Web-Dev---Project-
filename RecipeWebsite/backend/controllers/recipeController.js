@@ -1,6 +1,29 @@
 const db = require('../db/connection');
 
-// Get all recipes
+// Add a new recipe (POST)
+exports.addRecipe = async (req, res) => {
+    const { title, description, ingredients, instructions } = req.body;
+    const userId = req.session.userId; // Get the logged-in user's ID from session
+
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized, please log in' }); // Make sure the user is logged in
+    }
+
+    if (!title || !description || !ingredients || !instructions) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
+        const result = await db.query(query, [userId, title, description, ingredients, instructions]);
+        res.status(201).json({ message: 'Recipe added successfully', recipeId: result[0].insertId });
+    } catch (error) {
+        console.error('Error adding recipe:', error);
+        res.status(500).json({ error: 'Error adding recipe' });
+    }
+};
+
+// Other recipe controller methods (like getAllRecipes, getRecipeById, etc.) here
 exports.getAllRecipes = async (req, res) => {
     try {
         const [recipes] = await db.query('SELECT * FROM recipes');
@@ -24,20 +47,6 @@ exports.getRecipeById = async (req, res) => {
     } catch (error) {
         console.error('Error fetching recipe by ID:', error);
         res.status(500).json({ error: 'Error fetching recipe' });
-    }
-};
-
-// Add a new recipe
-exports.addRecipe = async (req, res) => {
-    const { user_id, title, description, ingredients, instructions } = req.body;
-
-    try {
-        const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
-        const result = await db.query(query, [user_id, title, description, ingredients, instructions]);
-        res.status(201).json({ message: 'Recipe added successfully', recipeId: result[0].insertId });
-    } catch (error) {
-        console.error('Error adding recipe:', error);
-        res.status(500).json({ error: 'Error adding recipe' });
     }
 };
 
@@ -81,36 +90,30 @@ exports.deleteRecipe = async (req, res) => {
 };
 
 // Add a recipe to favorites
-// Route handles the POST request when the user clicks the "Add to Favorites" button
 exports.addFavorite = async (req, res) => {
-    const recipeId = req.params.id; // Get the recipe ID from the URL
-    const userId = req.session.userId; // Get the logged-in user's ID from the session
+    const recipeId = req.params.id;
+    const userId = req.session.userId; // Get user ID from session
 
     if (!userId) {
-        return res.status(401).send('Unauthorized'); // User must be logged in
+        return res.status(401).json({ message: 'User not authenticated' });
     }
 
     try {
         const query = 'INSERT INTO favorites (user_id, recipe_id) VALUES (?, ?)';
-        await db.query(query, [userId, recipeId]); // Insert the favorite into the database
-        res.status(200).json({ message: 'Favorite added successfully.' }); // Respond with success
+        await db.query(query, [userId, recipeId]);
+        res.status(200).json({ message: 'Recipe added to favorites' });
     } catch (error) {
-        if (error.code === 'ER_DUP_ENTRY') {
-            res.status(400).json({ message: 'Recipe is already in favorites.' });
-        } else {
-            console.error('Error adding to favorites:', error.message);
-            res.status(500).json({ message: `Error adding to favorites: ${error.message}` });
-        }
+        console.error('Error adding recipe to favorites:', error);
+        res.status(500).json({ error: 'Error adding to favorites' });
     }
 };
 
-
 // Get user favorites
 exports.getFavorites = async (req, res) => {
-    const userId = req.session.userId; // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
 
     if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' }); // User must be logged in
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
@@ -120,21 +123,21 @@ exports.getFavorites = async (req, res) => {
             JOIN favorites f ON r.id = f.recipe_id
             WHERE f.user_id = ?
         `;
-        const [favorites] = await db.query(query, [userId]); // Fetch favorites for the user
-        res.status(200).json(favorites); // Return favorites as JSON
+        const [favorites] = await db.query(query, [userId]);
+        res.status(200).json(favorites);
     } catch (error) {
         console.error('Error fetching favorites:', error);
-        res.status(500).json({ error: 'Error fetching favorites' }); // Handle errors gracefully
+        res.status(500).json({ error: 'Error fetching favorites' });
     }
 };
 
 // Remove a recipe from favorites
 exports.removeFavorite = async (req, res) => {
-    const recipeId = req.params.id; // Get the recipe ID from the URL
-    const userId = req.session.userId; // Ensure the user is logged in via session
+    const recipeId = req.params.id;
+    const userId = req.session.userId;
 
     if (!userId) {
-        return res.status(401).send('Unauthorized');
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
@@ -142,14 +145,12 @@ exports.removeFavorite = async (req, res) => {
         const [result] = await db.query(query, [userId, recipeId]);
 
         if (result.affectedRows === 0) {
-            return res.status(404).send('Favorite not found.');
+            return res.status(404).json({ message: 'Favorite not found' });
         }
 
-        res.status(200).send('Favorite removed successfully.');
+        res.status(200).json({ message: 'Favorite removed successfully' });
     } catch (error) {
-        console.error('Error removing favorite:', error.message);
-        res.status(500).send('Error removing favorite.');
+        console.error('Error removing favorite:', error);
+        res.status(500).json({ error: 'Error removing favorite' });
     }
 };
-
-
