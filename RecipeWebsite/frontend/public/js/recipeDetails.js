@@ -1,18 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const recipeId = params.get('id'); // Get the recipe ID from the URL
-
     if (!recipeId) {
         document.getElementById('recipeDetails').innerHTML = '<p>No recipe ID provided.</p>';
         return;
     }
-
     try {
         const response = await fetch(`/api/recipe/${recipeId}`); // Call your backend API
         if (!response.ok) throw new Error('Failed to fetch recipe details');
-
         const recipe = await response.json();
-
         // Populate the details
         const detailsContainer = document.getElementById('recipeDetails');
         detailsContainer.innerHTML = `
