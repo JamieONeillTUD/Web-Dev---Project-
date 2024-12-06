@@ -47,10 +47,12 @@ function displayRecipes(recipes) {
         <div class="recipe-card">
             <h3>${recipe.strMeal}</h3>
             <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
-            <button onclick="viewRecipeDetails('${recipe.idMeal}')">View Recipe Details</button>
+            <p>${recipe.strInstructions.substring(0, 100)}...</p>
+            <a href="/recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
         </div>
     `).join('');
 }
+
 
 // Hook up the search bar and button
 document.getElementById('searchBarButton').addEventListener('click', () => {
