@@ -43,15 +43,27 @@ async function searchRecipes() {
 
 function displayRecipes(recipes) {
     const container = document.getElementById('recipeResults');
-    container.innerHTML = recipes.map(recipe => `
-        <div class="recipe-card">
-            <h3>${recipe.strMeal}</h3>
-            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
-            <p>${recipe.strInstructions.substring(0, 100)}...</p>
-            <a href="/recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
-        </div>
-    `).join('');
+    container.innerHTML = `
+        <section class="container py-5">
+            <h2 class="text-center mb-4">Search Results</h2>
+            <div class="row">
+                ${recipes.map(recipe => `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="${recipe.strMealThumb}" class="card-img-top" alt="${recipe.strMeal}">
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.strMeal}</h5>
+                                <p class="card-text">${recipe.strInstructions.substring(0, 100)}...</p>
+                                <a href="recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+    `;
 }
+
 
 
 // Hook up the search bar and button
