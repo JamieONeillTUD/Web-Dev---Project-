@@ -3,8 +3,11 @@ const path = require('path');
 const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
+const db = require('./db/connection'); // Import the database connection from connection.js
 const app = express();
 const port = 5050;
+
+
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
@@ -18,21 +21,14 @@ app.use(session({
     cookie: { secure: false } // Set to true if using HTTPS
 }));
 
-// Create a connection to the MySQL database
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', // Your MySQL password
-    database: 'recipe_website' // Your MySQL database name
-});
-
-// Connect to the database
-db.connect((err) => {
+// Test the connection when the server starts
+db.getConnection((err) => {
     if (err) {
-        console.error('Error connecting to the database:', err.message);
-        return;
+        console.error('Database connection failed:', err.message);
+        process.exit(1); // Exit process with failure
+    } else {
+        console.log('Database connected successfully!');
     }
-    console.log('Database connected successfully!');
 });
 
 // Middleware to protect private routes
@@ -43,16 +39,6 @@ function requireAuth(req, res, next) {
         res.redirect('/login.html'); // Redirect to login if not authenticated
     }
 }
-
-// Serve static files (excluding dashboard.html)
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'public'), {
-    index: false,
-    extensions: ['html']
-}));
-
-// Import recipes router
-const recipesRouter = require('./routes/recipes');
-app.use('/recipes', recipesRouter);
 
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
@@ -67,9 +53,8 @@ app.get('/login.html', (req, res) => {
 app.get('/register.html', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'register.html'));
 });
-
-// Protected route to serve the dashboard
 app.get('/user/dashboard', requireAuth, (req, res) => {
+    console.log(req.session); // Check session to ensure user is logged in
     res.sendFile(path.join(__dirname, '..', 'frontend', 'dashboard.html'));
 });
 
@@ -127,6 +112,67 @@ app.post('/login', (req, res) => {
             res.redirect('/user/dashboard');
         });
     });
+});
+
+// Fetch user details for the dashboard
+app.get('/user/details', requireAuth, (req, res) => {
+    const userId = req.session.userId;
+    db.query('SELECT first_name, last_name, email FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching user details:', err.message);
+            return res.status(500).json({ error: 'Error fetching user details' });
+        }
+        res.json(results[0]);
+    });
+});
+
+// Fetch user recipes for the dashboard
+app.get('/recipes', requireAuth, (req, res) => {
+    const userId = req.session.userId;
+    db.query('SELECT * FROM recipes WHERE user_id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching recipes:', err.message);
+            return res.status(500).json({ error: 'Error fetching recipes' });
+        }
+        res.json(results);
+    });
+});
+
+// Fetch user's favorite recipes
+app.get('/recipes/favorites', requireAuth, (req, res) => {
+    const userId = req.session.userId;
+    db.query(
+        `SELECT r.* 
+         FROM recipes r 
+         JOIN favorites f ON r.id = f.recipe_id 
+         WHERE f.user_id = ?`,
+        [userId],
+        (err, results) => {
+            if (err) {
+                console.error('Error fetching favorites:', err.message);
+                return res.status(500).json({ error: 'Error fetching favorites' });
+            }
+            res.json(results);
+        }
+    );
+});
+
+// Remove a recipe from favorites
+app.delete('/recipes/:id/favorites', requireAuth, (req, res) => {
+    const userId = req.session.userId;
+    const recipeId = req.params.id;
+
+    db.query(
+        'DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?',
+        [userId, recipeId],
+        (err) => {
+            if (err) {
+                console.error('Error removing favorite:', err.message);
+                return res.status(500).json({ error: 'Error removing favorite' });
+            }
+            res.status(200).json({ message: 'Favorite removed successfully' });
+        }
+    );
 });
 
 // Update user profile (POST)

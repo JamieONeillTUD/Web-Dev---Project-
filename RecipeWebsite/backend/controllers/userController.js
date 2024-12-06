@@ -29,8 +29,8 @@ exports.getDashboard = async (req, res) => {
         // Respond with all dashboard data
         res.status(200).json({
             user: userData[0],       // User details
-            recipes: userRecipes,   // User's own recipes
-            favorites: favorites    // User's favorite recipes
+            recipes: userRecipes,    // User's own recipes
+            favorites: favorites     // User's favorite recipes
         });
     } catch (error) {
         console.error('Error fetching dashboard:', error);
