@@ -78,26 +78,35 @@ function displayRecipes(recipes) {
 }
 
 // adding external api to favourites
-async function addToFavorites(id, title, image) {
+async function addToFavorites(recipeId, title, image) {
+    console.log('Adding to favorites:', { recipeId, title, image }); // Debugging
     try {
-        const response = await fetch('/api/favorites', {
+        const response = await fetch('/recipes/favorites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id, title, image }),
+            body: JSON.stringify({
+                recipe_id: recipeId,
+                title: title,
+                image: image,
+            }),
         });
 
         if (response.ok) {
             alert('Recipe added to favorites!');
         } else {
-            alert('Failed to add recipe to favorites.');
+            const error = await response.json();
+            console.error('Error response from server:', error); // Debugging
+            alert(`Failed to add to favorites: ${error.message}`);
         }
     } catch (error) {
-        console.error('Error adding recipe to favorites:', error);
-        alert('An error occurred. Please try again.');
+        console.error('Error adding to favorites:', error);
+        alert('Error adding to favorites. Please try again.');
     }
 }
+
+
 
 
 // Hook up the search bar and button

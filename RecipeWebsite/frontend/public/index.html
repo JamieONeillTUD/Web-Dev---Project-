@@ -122,9 +122,9 @@
                         <p class="card-text">A healthy meal with chicken, lettuce, and Caesar dressing.</p>
                         <a href="recipe.html?id=3" class="btn btn-primary">View Recipe</a>
                         <!-- Add to Favorites Button -->
-                        <form onsubmit="event.preventDefault(); addToFavorites(3);">
-                            <button type="submit" class="btn btn-secondary">Add to Favorites</button>
-                        </form>
+                        <button onclick="addToFavorites('123', 'Spaghetti Bolognese', 'https://example.com/image.jpg')">
+                            Add to Favorites
+                        </button>                        
                     </div>
                 </div>
             </div>
@@ -214,24 +214,24 @@
             createRecipeLink.style.display = 'none';
         }
 
-        async function addToFavorites(recipeId) {
-            try {
-                const response = await fetch(`/recipes/${recipeId}/favorites`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+        // async function addToFavorites(recipeId) {
+        //     try {
+        //         const response = await fetch(`/recipes/${recipeId}/favorites`, {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' }
+        //         });
 
-                if (response.ok) {
-                    alert('Recipe added to favorites!');
-                } else {
-                    const errorMessage = await response.json();
-                    alert(`Failed to add to favorites: ${errorMessage.message}`);
-                }
-            } catch (error) {
-                console.error('Error adding to favorites:', error);
-                alert('Error adding to favorites. Please try again.');
-            }
-        }
+        //         if (response.ok) {
+        //             alert('Recipe added to favorites!');
+        //         } else {
+        //             const errorMessage = await response.json();
+        //             alert(`Failed to add to favorites: ${errorMessage.message}`);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error adding to favorites:', error);
+        //         alert('Error adding to favorites. Please try again.');
+        //     }
+        // }
     </script>
 </body>
 

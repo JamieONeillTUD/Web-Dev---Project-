@@ -91,22 +91,29 @@ exports.deleteRecipe = async (req, res) => {
 
 // Add a recipe to favorites
 exports.addFavorite = async (req, res) => {
-    const recipeId = req.params.id;
-    const userId = req.session.userId; // Get user ID from session
+    const { recipe_id, title, image } = req.body; // Include title and image
+    const userId = req.session.userId; // Get the user ID from the session
+
+    console.log('Received data:', { recipe_id, title, image, userId }); // Debugging
 
     if (!userId) {
-        return res.status(401).json({ message: 'User not authenticated' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
-        const query = 'INSERT INTO favorites (user_id, recipe_id) VALUES (?, ?)';
-        await db.query(query, [userId, recipeId]);
-        res.status(200).json({ message: 'Recipe added to favorites' });
+        const query = `
+            INSERT INTO favorites (user_id, recipe_id, title, image)
+            VALUES (?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE recipe_id = recipe_id
+        `;
+        await db.query(query, [userId, recipe_id, title, image]);
+        res.status(200).json({ message: 'Recipe added to favorites!' });
     } catch (error) {
-        console.error('Error adding recipe to favorites:', error);
-        res.status(500).json({ error: 'Error adding to favorites' });
+        console.error('Error adding favorite:', error);
+        res.status(500).json({ message: 'Error adding to favorites.' });
     }
 };
+
 
 // Get user favorites
 exports.getFavorites = async (req, res) => {
