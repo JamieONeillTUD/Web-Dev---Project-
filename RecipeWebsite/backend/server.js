@@ -43,6 +43,10 @@ app.use('/recipes', recipesRouter);
 const externalRecipesRouter = require('./routes/externalRecipes');
 app.use('/api', externalRecipesRouter); // Mount the router
 
+// for favourites external recipes
+const favoritesRouter = require('./routes/favorites');
+app.use('/api', favoritesRouter);
+
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 

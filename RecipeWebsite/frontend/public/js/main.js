@@ -51,14 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function displayRecipes(recipes) {
     const container = document.getElementById('recipeResults');
-    container.innerHTML = recipes.map(recipe => `
-        <div class="recipe-card">
-            <h3>${recipe.strMeal}</h3>
-            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" />
-            <p>${recipe.strInstructions.substring(0, 100)}...</p>
-            <a href="/recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
-        </div>
-    `).join('');
+
     container.innerHTML = `
         <section class="container py-5">
             <h2 class="text-center mb-4">Search Results</h2>
@@ -71,6 +64,10 @@ function displayRecipes(recipes) {
                                 <h5 class="card-title">${recipe.strMeal}</h5>
                                 <p class="card-text">${recipe.strInstructions.substring(0, 100)}...</p>
                                 <a href="recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
+                                <!-- Add to Favorites Button -->
+                                <form onsubmit="event.preventDefault(); addToFavorites(${recipe.idMeal}, '${recipe.strMeal}', '${recipe.strMealThumb}');">
+                                    <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -80,7 +77,27 @@ function displayRecipes(recipes) {
     `;
 }
 
+// adding external api to favourites
+async function addToFavorites(id, title, image) {
+    try {
+        const response = await fetch('/api/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, title, image }),
+        });
 
+        if (response.ok) {
+            alert('Recipe added to favorites!');
+        } else {
+            alert('Failed to add recipe to favorites.');
+        }
+    } catch (error) {
+        console.error('Error adding recipe to favorites:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
 
 
 // Hook up the search bar and button
