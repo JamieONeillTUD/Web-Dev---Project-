@@ -28,10 +28,13 @@
                     </li>
                     <!-- Check if user is logged in -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/dashboard" id="dashboard-link">Dashboard</a>
+                        <a class="nav-link" href="/user/dashboard" id="dashboard-link" style="display:none;">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout" id="logout-link">Logout</a>
+                        <a class="nav-link" href="/recipes/add" id="create-recipe-link" style="display:none;">Create Recipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout" id="logout-link" style="display:none;">Logout</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login.html" id="login-link">Login</a>
@@ -52,31 +55,29 @@
         </div>
     </header>
 
-<!-- Recipe Search Section -->
-<section class="container py-5">
-    <h2 class="text-center mb-4">Find Your Next Recipe</h2>
-    <div class="d-flex justify-content-center">
-        <!-- Use the old structure but keep the new functionality -->
-        <input 
-            type="text" 
-            id="searchBar" 
-            class="form-control me-2" 
-            style="max-width: 1200px;" 
-            placeholder="Search for recipes..." 
-            required
-        >
-        <button 
-            id="searchBarButton" 
-            class="btn btn-primary"
-        >Search</button>
-    </div>
-</section>
-
-
-        <!-- Results Section -->
-        <div class="container">
-            <div id="recipeResults"></div> <!-- For displaying search results -->
+    <!-- Recipe Search Section -->
+    <section class="container py-5">
+        <h2 class="text-center mb-4">Find Your Next Recipe</h2>
+        <div class="d-flex justify-content-center">
+            <input 
+                type="text" 
+                id="searchBar" 
+                class="form-control me-2" 
+                style="max-width: 1200px;" 
+                placeholder="Search for recipes..." 
+                required
+            >
+            <button 
+                id="searchBarButton" 
+                class="btn btn-primary"
+            >Search</button>
         </div>
+    </section>
+
+    <!-- Results Section -->
+    <div class="container">
+        <div id="recipeResults"></div> <!-- For displaying search results -->
+    </div>
 
     <!-- Featured Recipes Section -->
     <section class="container py-5">
@@ -124,56 +125,55 @@
                         <form onsubmit="event.preventDefault(); addToFavorites(3);">
                             <button type="submit" class="btn btn-secondary">Add to Favorites</button>
                         </form>
-                        
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-        <!-- About Us Section -->
-        <section class="container py-5">
-            <h2 class="text-center mb-4">About Us</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <img src="/images/aboutus.jpg" class="card-img-top" alt="about us"> <!-- Correct path for image -->
-                </div>
-                <div class="col-md-6">
-                    <p>Welcome to Recipe Website, where we share the best recipes to make your life tastier! Whether you are looking for a quick breakfast, healthy lunch options, or a sweet treat, we’ve got you covered. Explore our collection of recipes and start cooking today!</p>
+    <!-- About Us Section -->
+    <section class="container py-5">
+        <h2 class="text-center mb-4">About Us</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="/images/aboutus.jpg" class="card-img-top" alt="about us"> <!-- Correct path for image -->
+            </div>
+            <div class="col-md-6">
+                <p>Welcome to Recipe Website, where we share the best recipes to make your life tastier! Whether you are looking for a quick breakfast, healthy lunch options, or a sweet treat, we’ve got you covered. Explore our collection of recipes and start cooking today!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="container py-5 bg-light">
+        <h2 class="text-center mb-4">What Our Users Say</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <blockquote>
+                        "This website has transformed my cooking! The recipes are so easy to follow, and I love the variety!"
+                    </blockquote>
+                    <p>- Emily, Home Cook</p>
                 </div>
             </div>
-        </section>
-    
-        <!-- Testimonials Section -->
-        <section class="container py-5 bg-light">
-            <h2 class="text-center mb-4">What Our Users Say</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            "This website has transformed my cooking! The recipes are so easy to follow, and I love the variety!"
-                        </blockquote>
-                        <p>- Emily, Home Cook</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            "I find amazing new dishes to try every week. The step-by-step instructions make it so easy."
-                        </blockquote>
-                        <p>- John, Food Lover</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            "I absolutely love the dessert recipes! My family is always asking for more."
-                        </blockquote>
-                        <p>- Sarah, Baker</p>
-                    </div>
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <blockquote>
+                        "I find amazing new dishes to try every week. The step-by-step instructions make it so easy."
+                    </blockquote>
+                    <p>- John, Food Lover</p>
                 </div>
             </div>
-        </section>
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <blockquote>
+                        "I absolutely love the dessert recipes! My family is always asking for more."
+                    </blockquote>
+                    <p>- Sarah, Baker</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-4">
@@ -187,28 +187,31 @@
 
     <script>
         // Check if user is logged in and dynamically update the nav links
-        const isLoggedIn = true; // Replace this with actual session check
+        const isLoggedIn = true; // Replace this with actual session check from backend
         const loginLink = document.getElementById('login-link');
         const registerLink = document.getElementById('register-link');
         const dashboardLink = document.getElementById('dashboard-link');
         const logoutLink = document.getElementById('logout-link');
+        const createRecipeLink = document.getElementById('create-recipe-link');
 
         if (isLoggedIn) {
             // Hide login and register links
             loginLink.style.display = 'none';
             registerLink.style.display = 'none';
 
-            // Show dashboard and logout links
+            // Show dashboard, logout, and create recipe links
             dashboardLink.style.display = 'block';
             logoutLink.style.display = 'block';
+            createRecipeLink.style.display = 'block';
         } else {
             // If the user is not logged in, show login and register links
             loginLink.style.display = 'block';
             registerLink.style.display = 'block';
 
-            // Hide dashboard and logout links
+            // Hide dashboard, logout, and create recipe links
             dashboardLink.style.display = 'none';
             logoutLink.style.display = 'none';
+            createRecipeLink.style.display = 'none';
         }
 
         async function addToFavorites(recipeId) {
@@ -229,7 +232,6 @@
                 alert('Error adding to favorites. Please try again.');
             }
         }
-
     </script>
 </body>
 
