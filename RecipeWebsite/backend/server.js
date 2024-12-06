@@ -133,7 +133,6 @@ app.post('/login', (req, res) => {
 });
 
 // Serve the dashboard page if the user is logged in
-// Serve the dashboard page if the user is logged in
 app.get('/user/dashboard', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login.html'); // Redirect to login if not logged in
@@ -179,30 +178,8 @@ app.get('/user/dashboard', (req, res) => {
                             <title>Your Dashboard - Recipe Website</title>
                             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
                             <style>
-                                .list-group-item {
-                                    display: flex;
-                                    justify-content: space-between;
-                                    align-items: center;
-                                    padding: 10px;
-                                    margin: 5px 0;
-                                    border: 1px solid #ccc;
-                                    border-radius: 5px;
-                                    background-color: #f9f9f9;
-                                }
-                                .btn-danger {
-                                    font-size: 0.8rem;
-                                    padding: 5px 10px;
-                                }
-                                .favorite-item {
-                                    display: flex;
-                                    align-items: center;
-                                    margin: 10px 0;
-                                }
-                                .favorite-item img {
-                                    width: 50px;
-                                    height: 50px;
-                                    margin-right: 10px;
-                                    border-radius: 5px;
+                                .card img {
+                                    max-height: 200px;
                                     object-fit: cover;
                                 }
                             </style>
@@ -248,16 +225,18 @@ app.get('/user/dashboard', (req, res) => {
                                     `).join('')}
                                 </ul>
                                 <h3>Your Favorites</h3>
-                                <ul class="list-group">
+                                <div class="row">
                                     ${favorites.map(fav => `
-                                        <li class="list-group-item favorite-item">
-                                            <img src="${fav.image}" alt="${fav.title}" />
-                                            <div>
-                                                <h5>${fav.title}</h5>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <img src="${fav.image}" class="card-img-top" alt="${fav.title}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${fav.title}</h5>
+                                                </div>
                                             </div>
-                                        </li>
+                                        </div>
                                     `).join('')}
-                                </ul>
+                                </div>
                             </div>
                             <script>
                                 document.getElementById('updateProfileForm').addEventListener('submit', async (event) => {
