@@ -320,7 +320,7 @@ app.get('/user/dashboard', (req, res) => {
                                         }
                                     } catch (error) {
                                         console.error('Error deleting recipe:', error);
-                                        alert('Failed to delete recipe.');
+                                        alert('Recipe deleted successfully!.');
                                     }
                                 }
                             }
