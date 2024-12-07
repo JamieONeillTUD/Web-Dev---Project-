@@ -261,13 +261,15 @@ app.get('/user/dashboard', (req, res) => {
                                         <div class="col-md-4">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">${recipe.title}</h5>
-                                                    <p class="card-text">${recipe.description}</p>
+                                                <h5 class="card-title">${recipe.title}</h5>
+                                                <p class="card-text">${recipe.description}</p>
+                                                <button onclick="deleteRecipe(${recipe.id})" class="btn btn-danger">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
                                     `).join('')}
                                 </div>
+
                                 <h3>Your Favorites</h3>
                                 <div class="row">
                                     ${favorites.map(fav => `
@@ -303,6 +305,25 @@ app.get('/user/dashboard', (req, res) => {
                                         console.error('Error:', error);
                                     }
                                 });
+
+                                async function deleteRecipe(recipeId) {
+                                const confirmDelete = confirm("Are you sure you want to delete this recipe?");
+                                if (confirmDelete) {
+                                    try {
+                                        const response = await fetch(\`/recipes/delete/\${recipeId}\`, { method: 'DELETE' });
+                                        if (response.ok) {
+                                            alert('Recipe deleted successfully!');
+                                            window.location.reload(); // Reload the page to reflect changes
+                                        } else {
+                                            const errorMessage = await response.json();
+                                            alert('Recipe deleted successfully!');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error deleting recipe:', error);
+                                        alert('Failed to delete recipe.');
+                                    }
+                                }
+                            }
                             </script>
                         </body>
                         </html>
