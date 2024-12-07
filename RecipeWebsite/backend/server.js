@@ -35,6 +35,9 @@ db.connect((err) => {
     console.log('Database connected successfully!');
 });
 
+// Serve static files (CSS, JS, Images)
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
+
 // Import recipes router
 const recipesRouter = require('./routes/recipes');
 app.use('/recipes', recipesRouter);
@@ -43,16 +46,14 @@ app.use('/recipes', recipesRouter);
 const externalRecipesRouter = require('./routes/externalRecipes');
 app.use('/api', externalRecipesRouter); // Mount the router
 
-// // for favourites external recipes
-// const favoritesRouter = require('./routes/favorites');
-// app.use('/api', favoritesRouter);
+app.get('/recipeDetails.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'recipeDetails.html'));
+});
+
 
 const recipeController = require('./controllers/recipeController');
 app.post('/recipes/favorites', recipeController.addFavorite);
 
-
-// Serve static files (CSS, JS, Images)
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
 // Serve HTML files
 app.get('/', (req, res) => {
@@ -132,7 +133,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-// Serve the dashboard page if the user is logged in
 app.get('/user/dashboard', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login.html'); // Redirect to login if not logged in
@@ -160,7 +160,7 @@ app.get('/user/dashboard', (req, res) => {
 
             // Fetch favorites from the "favorites" table with title and image
             db.query(
-                'SELECT title, image FROM favorites WHERE user_id = ?',
+                'SELECT recipe_id AS id, title, image FROM favorites WHERE user_id = ?',
                 [userId],
                 (err, favorites) => {
                     if (err) {
@@ -216,14 +216,19 @@ app.get('/user/dashboard', (req, res) => {
                                     <button type="submit" class="btn btn-primary">Update Profile</button>
                                 </form>
                                 <h3>Your Recipes</h3>
-                                <ul class="list-group">
+                                <div class="row">
                                     ${recipes.map(recipe => `
-                                        <li class="list-group-item">
-                                            <h5>${recipe.title}</h5>
-                                            <p>${recipe.description}</p>
-                                        </li>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <img src="/images/${recipe.image || 'default.jpg'}" class="card-img-top" alt="${recipe.title}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${recipe.title}</h5>
+                                                    <p class="card-text">${recipe.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     `).join('')}
-                                </ul>
+                                </div>
                                 <h3>Your Favorites</h3>
                                 <div class="row">
                                     ${favorites.map(fav => `
@@ -232,6 +237,7 @@ app.get('/user/dashboard', (req, res) => {
                                                 <img src="${fav.image}" class="card-img-top" alt="${fav.title}">
                                                 <div class="card-body">
                                                     <h5 class="card-title">${fav.title}</h5>
+                                                    <a href="http://localhost:5050/recipeDetails.html?id=${fav.id}" class="btn btn-primary">View Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -267,9 +273,6 @@ app.get('/user/dashboard', (req, res) => {
         });
     });
 });
-
-
-
 
 
 // Update user profile
