@@ -146,3 +146,13 @@ function displayRecipeDetails(recipe) {
         </div>
     `;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = true; // Replace this with actual session validation
+    const createRecipeLink = document.getElementById('create-recipe-link');
+    if (isLoggedIn) {
+        createRecipeLink.style.display = 'block';
+    } else {
+        createRecipeLink.style.display = 'none';
+    }
+});

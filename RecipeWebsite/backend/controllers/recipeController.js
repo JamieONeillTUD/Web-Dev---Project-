@@ -1,4 +1,4 @@
-const db = require('../db/connection');
+const db = require('../db/connection'); // make sure your database connection is correct
 
 // Add a new recipe (POST)
 exports.addRecipe = async (req, res) => {
@@ -16,12 +16,15 @@ exports.addRecipe = async (req, res) => {
     try {
         const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
         const result = await db.query(query, [userId, title, description, ingredients, instructions]);
+
         res.status(201).json({ message: 'Recipe added successfully', recipeId: result[0].insertId });
     } catch (error) {
         console.error('Error adding recipe:', error);
         res.status(500).json({ error: 'Error adding recipe' });
     }
 };
+
+
 
 // Other recipe controller methods (like getAllRecipes, getRecipeById, etc.) here
 exports.getAllRecipes = async (req, res) => {
@@ -34,11 +37,11 @@ exports.getAllRecipes = async (req, res) => {
     }
 };
 
-// Get a single recipe by id
 exports.getRecipeById = async (req, res) => {
     const { id } = req.params;
 
     try {
+        console.log(`Fetching recipe with ID: ${id}`); // Debugging
         const [recipe] = await db.query('SELECT * FROM recipes WHERE id = ?', [id]);
         if (recipe.length === 0) {
             return res.status(404).json({ message: 'Recipe not found' });
@@ -49,6 +52,7 @@ exports.getRecipeById = async (req, res) => {
         res.status(500).json({ error: 'Error fetching recipe' });
     }
 };
+
 
 // Update a recipe
 exports.updateRecipe = async (req, res) => {

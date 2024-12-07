@@ -1,13 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path'); // Fix: Import the path module
 const recipeController = require('../controllers/recipeController');
 
-// Create a new recipe (POST route)
-router.post('/add', recipeController.addRecipe);
+// Serve the create recipe page
+router.get('/create', (req, res) => {
+    // Correct the path to point to the frontend folder located outside backend
+    res.sendFile(path.join(__dirname, '..', '..', 'frontend', 'public', 'create-recipe.html'));
+});
 
-// Other routes related to recipes (as you had before)
+// Other routes
 router.get('/', recipeController.getAllRecipes);
 router.get('/:id', recipeController.getRecipeById);
+router.post('/add', recipeController.addRecipe);
 router.put('/:id', recipeController.updateRecipe);
 router.delete('/:id', recipeController.deleteRecipe);
 router.post('/:id/favorites', recipeController.addFavorite);

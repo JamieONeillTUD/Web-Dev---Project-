@@ -38,9 +38,8 @@ db.connect((err) => {
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
-// Import recipes router
-const recipesRouter = require('./routes/recipes');
-app.use('/recipes', recipesRouter);
+const recipesRouter = require('./routes/recipes'); // Make sure the path is correct
+app.use('/recipes', recipesRouter); // Use the recipes router for any /recipes routes
 
 // external recipes
 const externalRecipesRouter = require('./routes/externalRecipes');
@@ -60,7 +59,7 @@ app.get('/', (req, res) => {
     const userId = req.session.userId;
     const navbarLinks = userId ? `
         <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="/recipes/add">Create Recipe</a></li>
+        <li class="nav-item"><a class="nav-link" href="/recipes/create">Create Recipe</a></li>
         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
     ` : `
         <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
@@ -75,6 +74,14 @@ app.get('/login.html', (req, res) => {
 });
 app.get('/register.html', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'register.html'));
+});
+
+// Make sure the create recipe page exists and is served
+app.get('/recipes/create', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login.html'); // Redirect to login if user is not logged in
+    }
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'create-recipe.html')); // Serve the create recipe page
 });
 
 // Handle registration form submission (POST)
@@ -99,6 +106,30 @@ app.post('/register', (req, res) => {
             }
             res.redirect('/login.html');
         });
+    });
+});
+
+// Handle recipe creation (POST route)
+app.post('/recipes/add', (req, res) => {
+    const { title, description, ingredients, instructions } = req.body;
+    const userId = req.session.userId; // Get the logged-in user's ID from session
+
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized, please log in' }); // Make sure the user is logged in
+    }
+
+    if (!title || !description || !ingredients || !instructions) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Insert the new recipe into the database
+    const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [userId, title, description, ingredients, instructions], (err, result) => {
+        if (err) {
+            console.error('Error adding recipe:', err);
+            return res.status(500).json({ error: 'Error adding recipe' });
+        }
+        res.status(201).json({ message: 'Recipe added successfully', recipeId: result.insertId });
     });
 });
 
@@ -191,7 +222,6 @@ app.get('/user/dashboard', (req, res) => {
                                     <div class="collapse navbar-collapse" id="navbarNav">
                                         <ul class="navbar-nav ms-auto">
                                             <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="/recipes/add">Create Recipe</a></li>
                                             <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                                         </ul>
                                     </div>
@@ -350,36 +380,8 @@ app.get('/search', (req, res) => {
     });
 });
 
-// Serve Create Recipe page
-app.get('/recipes/add', (req, res) => {
-    if (!req.session.userId) {
-        return res.redirect('/login.html'); // Ensure the user is logged in before they can access this page
-    }
-    res.sendFile(path.join(__dirname, '..', 'frontend', 'create-recipe.html')); // Send the create recipe page
-});
 
-// Create Recipe (POST)
-app.post('/recipes/add', (req, res) => {
-    const { title, description, ingredients, instructions } = req.body;
-    const userId = req.session.userId; // Make sure the user is logged in
 
-    if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized, please log in' });
-    }
-
-    if (!title || !description || !ingredients || !instructions) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    const query = 'INSERT INTO recipes (user_id, title, description, ingredients, instructions) VALUES (?, ?, ?, ?, ?)';
-    db.query(query, [userId, title, description, ingredients, instructions], (err, result) => {
-        if (err) {
-            console.error('Error adding recipe:', err);
-            return res.status(500).json({ error: 'Error adding recipe' });
-        }
-        res.status(201).json({ message: 'Recipe added successfully', recipeId: result.insertId });
-    });
-});
 
 
 // Logout route
