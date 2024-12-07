@@ -153,7 +153,8 @@ app.post('/login', (req, res) => {
         }
 
         if (results.length === 0) {
-            return res.status(401).send('Invalid credentials');
+            // Redirect back to login with error message
+            return res.redirect('/login.html?error=Invalid credentials');
         }
 
         const user = results[0];
@@ -164,10 +165,12 @@ app.post('/login', (req, res) => {
             }
 
             if (!isMatch) {
-                return res.status(401).send('Invalid credentials');
+                // Redirect back to login with error message
+                return res.redirect('/login.html?error=Invalid credentials');
             }
 
-            req.session.userId = user.id; // Store user ID in session
+            // If login is successful, store user ID in session and redirect to dashboard
+            req.session.userId = user.id;
             res.redirect('/user/dashboard');
         });
     });
@@ -217,26 +220,42 @@ app.get('/user/dashboard', (req, res) => {
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                             <title>Your Dashboard - Recipe Website</title>
                             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-                            <style>
-                                .card img {
-                                    max-height: 200px;
-                                    object-fit: cover;
-                                }
-                            </style>
+                                <!-- Bootstrap CSS -->
+                             <link rel="stylesheet" href="/css/main.css"> <!-- Correct path for CSS -->
+
                         </head>
                         <body>
+                        <!-- Navigation Bar -->
                             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                                 <div class="container-fluid">
                                     <a class="navbar-brand" href="/">Recipe Website</a>
+                                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
                                     <div class="collapse navbar-collapse" id="navbarNav">
                                         <ul class="navbar-nav ms-auto">
-                                            <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="/recipes/create">Create Recipe</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="/">Home</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/user/dashboard" id="dashboard-link" >Dashboard</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/recipes/create" id="create-recipe-link">Create Recipe</a>
+                                            </li>                                                   
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/logout" id="logout-link" >Logout</a>
+                                            </li>        
                                         </ul>
                                     </div>
                                 </div>
                             </nav>
+                            <header class="bg-primary text-white text-center py-5">
+                                <div class="container">
+                                    <h1 class="display-4">User Dashboard</h1>
+                                    <p class="lead">Showcase your delicious recipes!</p>
+                                </div>
+                            </header>
                             <div class="container py-5">
                                 <h1 class="display-4">Welcome, ${user.first_name}!</h1>
                                 <h3>Edit Profile</h3>
