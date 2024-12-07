@@ -35,6 +35,15 @@ db.connect((err) => {
     console.log('Database connected successfully!');
 });
 
+app.get('/check-login-status', (req, res) => {
+    // Check if the user is logged in based on session data
+    if (req.session.userId) {
+        res.json({ loggedIn: true });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
+
 // Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
@@ -76,7 +85,7 @@ app.get('/register.html', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'register.html'));
 });
 
-// Make sure the create recipe page exists and is served
+// Serve Create Recipe page (with login check)
 app.get('/recipes/create', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login.html'); // Redirect to login if user is not logged in
@@ -222,6 +231,7 @@ app.get('/user/dashboard', (req, res) => {
                                     <div class="collapse navbar-collapse" id="navbarNav">
                                         <ul class="navbar-nav ms-auto">
                                             <li class="nav-item"><a class="nav-link" href="/user/dashboard">Dashboard</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/recipes/create">Create Recipe</a></li>
                                             <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                                         </ul>
                                     </div>
@@ -250,7 +260,6 @@ app.get('/user/dashboard', (req, res) => {
                                     ${recipes.map(recipe => `
                                         <div class="col-md-4">
                                             <div class="card">
-                                                <img src="/images/${recipe.image || 'default.jpg'}" class="card-img-top" alt="${recipe.title}">
                                                 <div class="card-body">
                                                     <h5 class="card-title">${recipe.title}</h5>
                                                     <p class="card-text">${recipe.description}</p>

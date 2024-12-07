@@ -32,7 +32,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/recipes/create" id="create-recipe-link" style="display:none;">Create Recipe</a>
-                    </li>                                    
+                    </li>                                                   
                     <li class="nav-item">
                         <a class="nav-link" href="/logout" id="logout-link" style="display:none;">Logout</a>
                     </li>
@@ -78,58 +78,6 @@
     <div class="container">
         <div id="recipeResults"></div> <!-- For displaying search results -->
     </div>
-
-    <!-- Featured Recipes Section -->
-    <section class="container py-5">
-        <h2 class="text-center mb-4">Featured Recipes</h2>
-        <div class="row">
-            <!-- Recipe Card 1 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/spag.jpeg" class="card-img-top" alt="Spaghetti Bolognese"> <!-- Correct path for image -->
-                    <div class="card-body">
-                        <h5 class="card-title">Spaghetti Bolognese</h5>
-                        <p class="card-text">A classic Italian dish with ground beef and tomato sauce.</p>
-                        <a href="recipe.html?id=1" class="btn btn-primary">View Recipe</a>
-                        <!-- Add to Favorites Button -->
-                        <form onsubmit="event.preventDefault(); addToFavorites(1);">
-                            <button type="submit" class="btn btn-secondary">Add to Favorites</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- Recipe Card 2 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/pan.jpeg" class="card-img-top" alt="Fluffy Pancakes"> <!-- Correct path for image -->
-                    <div class="card-body">
-                        <h5 class="card-title">Fluffy Pancakes</h5>
-                        <p class="card-text">Light and fluffy pancakes, perfect for breakfast!</p>
-                        <a href="recipe.html?id=2" class="btn btn-primary">View Recipe</a>
-                        <!-- Add to Favorites Button -->
-                        <form onsubmit="event.preventDefault(); addToFavorites(2);">
-                            <button type="submit" class="btn btn-secondary">Add to Favorites</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- Recipe Card 3 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/chic.jpeg" class="card-img-top" alt="Chicken Caesar Salad"> <!-- Correct path for image -->
-                    <div class="card-body">
-                        <h5 class="card-title">Chicken Caesar Salad</h5>
-                        <p class="card-text">A healthy meal with chicken, lettuce, and Caesar dressing.</p>
-                        <a href="recipe.html?id=3" class="btn btn-primary">View Recipe</a>
-                        <!-- Add to Favorites Button -->
-                        <button onclick="addToFavorites('123', 'Spaghetti Bolognese', 'https://example.com/image.jpg')">
-                            Add to Favorites
-                        </button>                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- About Us Section -->
     <section class="container py-5">
@@ -186,52 +134,50 @@
     <script src="/js/main.js"></script> <!-- Correct path for JS -->
 
     <script>
-        // Check if user is logged in and dynamically update the nav links
-        const isLoggedIn = true; // Replace this with actual session check from backend
-        const loginLink = document.getElementById('login-link');
-        const registerLink = document.getElementById('register-link');
-        const dashboardLink = document.getElementById('dashboard-link');
-        const logoutLink = document.getElementById('logout-link');
-        const createRecipeLink = document.getElementById('create-recipe-link');
-
-        if (isLoggedIn) {
-            // Hide login and register links
-            loginLink.style.display = 'none';
-            registerLink.style.display = 'none';
-
-            // Show dashboard, logout, and create recipe links
-            dashboardLink.style.display = 'block';
-            logoutLink.style.display = 'block';
-            createRecipeLink.style.display = 'block';
-        } else {
-            // If the user is not logged in, show login and register links
-            loginLink.style.display = 'block';
-            registerLink.style.display = 'block';
-
-            // Hide dashboard, logout, and create recipe links
-            dashboardLink.style.display = 'none';
-            logoutLink.style.display = 'none';
-            createRecipeLink.style.display = 'none';
-        }
-
-        // async function addToFavorites(recipeId) {
-        //     try {
-        //         const response = await fetch(`/recipes/${recipeId}/favorites`, {
-        //             method: 'POST',
-        //             headers: { 'Content-Type': 'application/json' }
-        //         });
-
-        //         if (response.ok) {
-        //             alert('Recipe added to favorites!');
-        //         } else {
-        //             const errorMessage = await response.json();
-        //             alert(`Failed to add to favorites: ${errorMessage.message}`);
-        //         }
-        //     } catch (error) {
-        //         console.error('Error adding to favorites:', error);
-        //         alert('Error adding to favorites. Please try again.');
-        //     }
-        // }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Make an API call to check if the user is logged in
+            fetch('/check-login-status', {
+                method: 'GET', // Send a GET request to check login status
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const loginLink = document.getElementById('login-link');
+                const registerLink = document.getElementById('register-link');
+                const dashboardLink = document.getElementById('dashboard-link');
+                const logoutLink = document.getElementById('logout-link');
+                const createRecipeLink = document.getElementById('create-recipe-link');
+        
+                // Check if the user is logged in based on the response from the backend
+                const isLoggedIn = data.loggedIn; // Expecting a response like { loggedIn: true }
+        
+                if (isLoggedIn) {
+                    // Hide login and register links
+                    loginLink.style.display = 'none';
+                    registerLink.style.display = 'none';
+        
+                    // Show dashboard, logout, and create recipe links
+                    dashboardLink.style.display = 'block';
+                    logoutLink.style.display = 'block';
+                    createRecipeLink.style.display = 'block';
+                } else {
+                    // If the user is not logged in, show login and register links
+                    loginLink.style.display = 'block';
+                    registerLink.style.display = 'block';
+        
+                    // Hide dashboard, logout, and create recipe links
+                    dashboardLink.style.display = 'none';
+                    logoutLink.style.display = 'none';
+                    createRecipeLink.style.display = 'none';
+                }
+            })
+            .catch((error) => {
+                console.error('Error checking login status:', error);
+            });
+        });
+        
     </script>
 </body>
 
