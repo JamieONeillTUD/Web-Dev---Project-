@@ -82,33 +82,41 @@ section.container {
     margin-bottom: 15px;
 }
 
-/* Buttons */
-.btn-primary {
-    background-color: #FF6700;
-    border-color: #FF6700;
-    border-radius: 30px;
+/* Unified Button Styling */
+.btn {
+    font-size: 1rem;
     padding: 10px 20px;
-    transition: background-color 0.3s ease;
+    border-radius: 27px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Primary Button (View Recipe Details) */
+.btn-primary {
+    background-color: #FF6700;  /* Orange color */
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #E05D00;  /* Slightly darker on hover */
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Add to Favorites) */
 .btn-secondary {
-    background-color: #F5F5DC; /* Beige background color */
-    border-color: #F5F5DC; /* Match border color */
-    border-radius: 10px; /* Slightly curved edges */
-    padding: 5px 15px; /* Smaller padding for a smaller button */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
-    color: #333; /* Dark text for contrast */
-    font-size: 0.875rem; /* Slightly smaller font size */
-    font-weight: bold;
-    text-transform: capitalize; /* Capitalize text */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    background-color: #f2b314;  /* Warm Yellow color */
+    color: white;
+    border: none;
+    font-size: 1rem; /* Ensure same font size */
+    padding: 10px 20px; /* Consistent padding */
 }
 
 .btn-secondary:hover {
-    background-color: #E0E0C7; /* Slightly darker beige on hover */
-    border-color: #E0E0C7; /* Match hover border */
-    color: #000; /* Darker text on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+    background-color: #005F60;  
+    transform: translateY(-2px);
 }
 
 /* Text Box Styling */
