@@ -25,11 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    loadFilterOptions(); // Load filters on page load
-    applyDefaultRecipes(); // Load default recipes on page load
-    document.getElementById('searchButton').addEventListener('click', applyFilters); 
+    loadFilterOptions(); 
+    applyDefaultRecipes(); 
+
+    document.getElementById('searchButton').addEventListener('click', () => {
+        applyFilters();
+        resetFilters(); // Reset after search
+    });
+
     document.getElementById('searchBar').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') applyFilters(); 
+        if (event.key === 'Enter') {
+            applyFilters();
+            resetFilters(); // Reset after search
+        }
     });
 });
 
@@ -58,10 +66,10 @@ function populateDropdown(elementId, items, key) {
     });
 }
 
-// Load Default Recipes on Page Load
+// Load Default Recipes
 async function applyDefaultRecipes() {
     try {
-        const response = await fetch('/api/search');  // Default search without filters
+        const response = await fetch('/api/search');
         const recipes = await response.json();
         displayRecipes(recipes);
     } catch (error) {
@@ -76,18 +84,30 @@ async function applyFilters() {
     const cuisine = document.getElementById('cuisineFilter').value;
     const category = document.getElementById('categoryFilter').value;
 
-    const queryParams = new URLSearchParams({ q: query, ingredient, cuisine, category }).toString();
+    // Combine query parameters only if present
+    const queryParams = new URLSearchParams();
+    if (query) queryParams.append("q", query);
+    if (ingredient) queryParams.append("ingredient", ingredient);
+    if (cuisine) queryParams.append("cuisine", cuisine);
+    if (category) queryParams.append("category", category);
 
     try {
         const response = await fetch(`/api/search?${queryParams}`);
         if (!response.ok) throw new Error('Failed to fetch recipes');
-        
         const recipes = await response.json();
         displayRecipes(recipes);
     } catch (error) {
         console.error("Error searching recipes:", error);
         alert('Failed to load recipes. Please try again.');
     }
+}
+
+// Reset Filters
+function resetFilters() {
+    document.getElementById('searchBar').value = '';
+    document.getElementById('ingredientFilter').value = '';
+    document.getElementById('cuisineFilter').selectedIndex = 0;
+    document.getElementById('categoryFilter').selectedIndex = 0;
 }
 
 // Display Recipes
@@ -152,11 +172,11 @@ async function addToFavorites(recipeId, title, image) {
 
 
 
-// Hook up the search bar and button
-document.getElementById('searchBarButton').addEventListener('click', () => {
-    const query = document.getElementById('searchBar').value;
-    searchRecipes(query);
-});
+// // Hook up the search bar and button
+// document.getElementById('searchBarButton').addEventListener('click', () => {
+//     const query = document.getElementById('searchBar').value;
+//     searchRecipes(query);
+// });
 
 async function viewRecipeDetails(recipeId) {
     try {

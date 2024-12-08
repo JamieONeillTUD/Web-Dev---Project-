@@ -58,21 +58,25 @@ router.get('/categories', async (req, res) => {
 });
 
 // Search with filters or return default recipes
+// Search Recipes Route
 router.get('/search', async (req, res) => {
     const { q, ingredient, cuisine, category } = req.query;
     let url = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 
-    if (q) {
-        url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${q}`;
-    } else if (ingredient) {
-        url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
-    } else if (cuisine) {
-        url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${cuisine}`;
-    } else if (category) {
-        url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
-    }
-
     try {
+        if (ingredient) {
+            url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+        }
+        if (cuisine) {
+            url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${cuisine}`;
+        }
+        if (category) {
+            url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+        }
+        if (q) {
+            url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${q}`;
+        }
+
         const response = await axios.get(url);
         res.json(response.data.meals || []);
     } catch (error) {
@@ -80,5 +84,6 @@ router.get('/search', async (req, res) => {
         res.status(500).json({ message: "Error searching recipes" });
     }
 });
+
 
 module.exports = router;
