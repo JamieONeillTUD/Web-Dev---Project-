@@ -1,0 +1,211 @@
+/* 
+Summary:
+This CSS file contains styles for the Recipe Website, covering various elements such as the general layout, hero section, recipe cards, buttons,
+text boxes, navigation bar, footer, and responsiveness. It also includes animations and custom styling for UI components like buttons, cards, and form inputs.
+The styling is primarily focused on a clean, modern, and user-friendly design, with vibrant colors and smooth transitions. 
+It also includes responsiveness to ensure the website works well on different screen sizes.
+
+Author: [Andrea Luca - C22390831 / Jamie O'Neill - C22320302]
+Date: [28/10/24] - [06/12/24]
+*/
+
+/* General Body Styling */
+html, body {
+    height: 100%; /* Ensure the page occupies the full height */
+    margin: 0; /* Remove default margin */
+    font-family: 'Arial', sans-serif; /* Set the font for the page */
+    background: linear-gradient(to right, #FFFAF0, #FFE4B5); /* Light gradient background */
+}
+
+/* Body flexbox layout to push the footer down */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Hero Section Styling */
+header {
+    background: linear-gradient(to right, #FF6F00, #FFA500); /* Orange gradient */
+    color: white; /* White text color */
+    padding: 60px 0; /* Padding for spacing */
+    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5); /* Text shadow for better readability */
+}
+
+header h1 {
+    font-size: 3.5rem; /* Large heading */
+    margin-bottom: 20px; /* Space below the heading */
+    animation: fadeIn 2s ease-in-out; /* Fade-in animation */
+}
+
+header p {
+    font-size: 1.5rem; /* Slightly smaller paragraph */
+    margin-bottom: 20px; /* Space below the paragraph */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0; /* Start from transparent */
+    }
+    to {
+        opacity: 1; /* Fade to fully opaque */
+    }
+}
+
+/* Recipe Search Section */
+section.container {
+    padding: 60px 15px; /* Padding around the content */
+}
+
+/* Recipe Cards Layout */
+.card {
+    border-radius: 15px; /* Rounded corners for cards */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow: hidden; /* Hide overflowed content */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Move the card up on hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.card-img-top {
+    width: 100%; /* Make image full width */
+    height: 200px; /* Fixed height for the image */
+    object-fit: cover; /* Ensure the image covers the area without stretching */
+}
+
+.card-body {
+    padding: 20px; /* Padding for the card body */
+    background: #ffffff; /* White background for the card body */
+}
+
+.card-title {
+    font-size: 1.25rem; /* Set the font size for the title */
+    font-weight: bold; /* Make the title bold */
+}
+
+.card-text {
+    font-size: 1rem; /* Normal font size for description */
+    color: #555; /* Dark grey color for text */
+    margin-bottom: 15px; /* Space below the text */
+}
+
+
+/* Buttons */
+.btn-primary {
+    background-color: #FF6700; /* Orange background for primary button */
+    border-color: #FF6700; /* Match border color with background */
+    border-radius: 30px; /* Rounded edges for the button */
+    padding: 10px 20px; /* Padding for the button */
+    transition: background-color 0.3s ease; /* Smooth color transition on hover */
+}
+
+/* Primary Button (View Recipe Details) */
+.btn-primary {
+    background-color: #FF6700;  /* Orange color */
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #E05D00;  /* Slightly darker on hover */
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Add to Favorites) */
+.btn-secondary {
+    background-color: #F5F5DC; /* Beige background for secondary button */
+    border-color: #F5F5DC; /* Match border with background */
+    border-radius: 10px; /* Slightly rounded edges */
+    padding: 5px 15px; /* Smaller padding */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    color: #333; /* Dark text for contrast */
+    font-size: 0.875rem; /* Slightly smaller font size */
+    font-weight: bold; /* Bold text */
+    text-transform: capitalize; /* Capitalize text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.btn-secondary:hover {
+    background-color: #E0E0C7; /* Darker beige on hover */
+    border-color: #E0E0C7; /* Match hover border */
+    color: #000; /* Darker text on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+}
+
+
+/* Text Box Styling */
+.text-box {
+    background: #FFF8E1; /* Light yellow background */
+    padding: 30px; /* Padding inside the text box */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-top: 30px; /* Space above the box */
+}
+
+.text-box p {
+    font-size: 1.2rem; /* Slightly larger text */
+    color: #333; /* Dark grey text */
+}
+
+/* Navbar Customization */
+.navbar-dark {
+    background-color: #FF6F00 !important; /* Orange navbar background */
+}
+
+.navbar-dark .navbar-brand {
+    color: #FFF !important; /* White brand text */
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #FFF !important; /* White link color */
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #FFD700 !important; /* Gold color on hover */
+}
+
+/* Footer Styling */
+footer {
+    background-color: #FF4500 !important; /* Red-orange footer background */
+    color: white; /* White text */
+    text-align: center; /* Center text */
+    padding: 20px; /* Padding for the footer */
+}
+
+footer p {
+    font-size: 1rem; /* Footer text size */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column; /* Stack columns vertically on small screens */
+        align-items: center; /* Center align the items */
+    }
+
+    .col-md-4, .col-md-6 {
+        flex: 0 0 100%; /* Make columns take full width */
+    }
+}
+
+/* Recipe Card Styling */
+.recipe-card {
+    border: 1px solid #ddd; /* Light grey border */
+    padding: 10px; /* Padding inside the card */
+    margin: 10px; /* Space between cards */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center text */
+}
+
+.recipe-card img {
+    max-width: 100%; /* Make image fit the card */
+    border-radius: 5px; /* Round corners of the image */
+}
+
+.recipe-card h3 {
+    font-size: 1.2rem; /* Card title size */
+}
