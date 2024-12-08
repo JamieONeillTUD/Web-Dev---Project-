@@ -1,9 +1,9 @@
 /* General Body Styling */
 html, body {
-    height: 100%; /* Ensure full viewport height */
-    margin: 0; /* Remove default margin */
+    height: 100%;
+    margin: 0;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+    background: linear-gradient(to right, #FFFAF0, #FFE4B5);
 }
 
 /* Body flexbox layout to push the footer down */
@@ -15,7 +15,7 @@ body {
 
 /* Hero Section Styling */
 header {
-    background: linear-gradient(to right, #007bff, #17a2b8);
+    background: linear-gradient(to right, #FF6F00, #FFA500); /* Orange gradient */
     color: white;
     padding: 60px 0;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
@@ -82,22 +82,23 @@ section.container {
     margin-bottom: 15px;
 }
 
+/* Buttons */
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #FF6700;
+    border-color: #FF6700;
     border-radius: 30px;
     padding: 10px 20px;
     transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #FFA500;
+    border-color: #FFA500;
 }
 
 /* Text Box Styling */
 .text-box {
-    background: #f8f9fa;
+    background: #FFF8E1;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -109,15 +110,26 @@ section.container {
     color: #333;
 }
 
-/* Image Section Styling */
-.img-fluid {
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Navbar Customization */
+.navbar-dark {
+    background-color: #FF6F00 !important;
+}
+
+.navbar-dark .navbar-brand {
+    color: #FFF !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #FFF !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #FFD700 !important;
 }
 
 /* Footer Styling */
 footer {
-    background-color: #222;
+    background-color: #FF4500 !important;
     color: white;
     text-align: center;
     padding: 20px;
@@ -143,7 +155,7 @@ footer p {
 }
 
 .scroll-button:hover {
-    background-color: #007bff;
+    background-color: #FF6700;
 }
 
 .scroll-button-left {
@@ -153,6 +165,7 @@ footer p {
 .scroll-button-right {
     right: 10px;
 }
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .row {
@@ -160,15 +173,12 @@ footer p {
         align-items: center;
     }
 
-    .col-md-4 {
-        flex: 0 0 100%;
-    }
-
-    .col-md-6 {
+    .col-md-4, .col-md-6 {
         flex: 0 0 100%;
     }
 }
 
+/* Recipe Card Styling */
 .recipe-card {
     border: 1px solid #ddd;
     padding: 10px;

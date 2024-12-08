@@ -232,7 +232,9 @@ app.get('/user/dashboard', (req, res) => {
                         <!-- Navigation Bar -->
                             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                                 <div class="container-fluid">
-                                    <a class="navbar-brand" href="/">Recipe Website</a>
+                                    <a class="navbar-brand" href="/">
+                                        <img src="/images/andyjay.png" alt="Recipe Website Logo" style="height: 60px; border-radius: 35px;">
+                                    </a>
                                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                         <span class="navbar-toggler-icon"></span>
                                     </button>
