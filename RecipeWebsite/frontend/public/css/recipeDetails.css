@@ -1,37 +1,61 @@
+/* 
+Summary:
+This CSS file is designed for the Recipe Details page of the website.
+It provides styling for the layout, recipe card, image display, ingredients list, and the "back" button. 
+The aim is to create a clean, modern design with a minimalistic, readable style for displaying recipe details.
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-        }
-        .card {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: none;
-            border-radius: 8px;
-            background: white;
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        .content-container {
-            padding: 20px;
-        }
-        .ingredient-list li {
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-        .btn-back {
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-        h1, h2, h4 {
-            font-size: 1.5rem;
-        }
-        p, li {
-            font-size: 0.95rem;
-        }
+Author: [Andrea Luca - C22390831]
+Date: [20/11/24] - [06/12/24]
+*/
+
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif; /* Set the font to Arial for the body text */
+    background-color: #f8f9fa; /* Light background color for the page */
+}
+
+/* Styling for the Recipe Card */
+.card {
+    max-width: 600px; /* Set a maximum width for the card */
+    margin: 40px auto; /* Center the card horizontally with top/bottom margin */
+    padding: 20px; /* Add padding inside the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow around the card */
+    border: none; /* Remove the default border */
+    border-radius: 8px; /* Rounded corners for the card */
+    background: white; /* Set white background color for the card */
+}
+
+/* Styling for the Recipe Image inside the card */
+.card img {
+    width: 100%; /* Make the image fill the entire width of the card */
+    height: auto; /* Maintain aspect ratio of the image */
+    border-radius: 5px; /* Slightly round the corners of the image */
+    margin-bottom: 15px; /* Add space below the image */
+}
+
+/* Content Container Styling */
+.content-container {
+    padding: 20px; /* Padding inside the content container */
+}
+
+/* Styling for the Ingredient List */
+.ingredient-list li {
+    margin-bottom: 5px; /* Add space between each ingredient */
+    font-size: 0.9rem; /* Set font size for ingredient list items */
+}
+
+/* Back Button Styling */
+.btn-back {
+    margin-bottom: 20px; /* Add space below the back button */
+    font-size: 0.9rem; /* Set a smaller font size for the button */
+}
+
+/* Headings Styling */
+h1, h2, h4 {
+    font-size: 1.5rem; /* Set a larger font size for headings */
+}
+
+/* Paragraph and List Item Styling */
+p, li {
+    font-size: 0.95rem; /* Set a slightly smaller font size for paragraphs and list items */
+}

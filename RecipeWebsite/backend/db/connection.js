@@ -3,13 +3,13 @@ require('dotenv').config(); // Load environment variables from .env file
 
 // Create a MySQL connection pool
 const connection = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',     // Database host (default: localhost)
-    user: process.env.DB_USER || 'root',         // Database user (default: root)
-    password: process.env.DB_PASSWORD || '',     // Database password (default: empty)
-    database: process.env.DB_NAME || 'recipe_website', // Database name
-    waitForConnections: true,                    // Ensure connection pool waits for availability
-    connectionLimit: 10,                         // Max number of connections in the pool
-    queueLimit: 0                                // Unlimited connection queue
+    host: process.env.DB_HOST || 'localhost',     
+    user: process.env.DB_USER || 'root',         
+    password: process.env.DB_PASSWORD || '',     
+    database: process.env.DB_NAME || 'recipe_website', 
+    waitForConnections: true,                    
+    connectionLimit: 10,                         
+    queueLimit: 0                                
 });
 
 // Test the connection

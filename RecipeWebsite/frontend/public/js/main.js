@@ -1,63 +1,65 @@
-// Smooth Scroll for Recipe Cards
-function scrollLeft() {
-    const container = document.querySelector('.recipe-container');
-    container.scrollBy({
-        left: -300, // Scroll by 300px to the left
-        behavior: 'smooth'
-    });
-}
+/**
+ * Summary:
+ * This script handles various functionalities on the Recipe Website's main page. 
+ * It manages the dynamic display of the navigation links based on the user's login status,
+ * populates filter options for searching recipes, fetches default recipes, and applies filters for searching. 
+ * Additionally, it allows users to add recipes to their favorites, view recipe details, and navigate between pages. 
+ * It also dynamically updates the displayed content based on user interactions and input.
+ * 
+    Author: [Andrea Luca - C22390831 / Jamie O'Neill - C22320302]
+    Date: [28/10/24] - [02/12/24]
+ */
 
-function scrollRight() {
-    const container = document.querySelector('.recipe-container');
-    container.scrollBy({
-        left: 300, // Scroll by 300px to the right
-        behavior: 'smooth'
-    });
-}
-
-// Add active class to navbar items when clicked
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Handle navigation links active state on click
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navLinks.forEach(link => link.classList.remove('active'));
-            link.classList.add('active');
+            navLinks.forEach(link => link.classList.remove('active')); // Remove active class from all links
+            link.classList.add('active'); // Add active class to clicked link
         });
     });
 
+    // 2. Initialize the page with default filters and recipes
     loadFilterOptions(); 
     applyDefaultRecipes(); 
 
+    // 3. Add event listeners for search functionality
     document.getElementById('searchButton').addEventListener('click', () => {
         applyFilters();
-        resetFilters(); // Reset after search
+        resetFilters(); // Reset the filters after searching
     });
 
+    // 4. Add event listener for 'Enter' key press in the search bar
     document.getElementById('searchBar').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             applyFilters();
-            resetFilters(); // Reset after search
+            resetFilters(); // Reset the filters after searching
         }
     });
 });
 
-// Load Filter Options
+// 5. Load Filter Options (Cuisines & Categories)
 async function loadFilterOptions() {
     try {
+        // Fetch cuisines and categories from API
         const cuisines = await fetch('/api/cuisines').then(res => res.json());
         const categories = await fetch('/api/categories').then(res => res.json());
 
+        // Populate dropdowns with fetched data
         populateDropdown('cuisineFilter', cuisines, 'strArea');
         populateDropdown('categoryFilter', categories, 'strCategory');
     } catch (error) {
-        console.error("Error loading filter options:", error);
+        console.error("Error loading filter options:", error); // Handle errors during fetch
     }
 }
 
-// Populate Dropdown
+// 6. Populate Dropdowns for filter options
 function populateDropdown(elementId, items, key) {
     const select = document.getElementById(elementId);
-    select.innerHTML = `<option value="">Any</option>`;
+    select.innerHTML = `<option value="">Any</option>`; // Default option
+
+    // Loop through items and add each to dropdown
     items.forEach(item => {
         const option = document.createElement('option');
         option.value = item[key];
@@ -66,43 +68,44 @@ function populateDropdown(elementId, items, key) {
     });
 }
 
-// Load Default Recipes
+// 7. Load Default Recipes when the page loads
 async function applyDefaultRecipes() {
     try {
         const response = await fetch('/api/search');
         const recipes = await response.json();
-        displayRecipes(recipes);
+        displayRecipes(recipes); // Display the fetched recipes
     } catch (error) {
         console.error("Error loading default recipes:", error);
     }
 }
 
-// Apply Filters
+// 8. Apply Filters based on user input
 async function applyFilters() {
     const query = document.getElementById('searchBar').value.trim();
     const ingredient = document.getElementById('ingredientFilter').value.trim();
     const cuisine = document.getElementById('cuisineFilter').value;
     const category = document.getElementById('categoryFilter').value;
 
-    // Combine query parameters only if present
+    // Create query parameters for search
     const queryParams = new URLSearchParams();
     if (query) queryParams.append("q", query);
     if (ingredient) queryParams.append("ingredient", ingredient);
     if (cuisine) queryParams.append("cuisine", cuisine);
     if (category) queryParams.append("category", category);
 
+    // Fetch recipes based on filters
     try {
         const response = await fetch(`/api/search?${queryParams}`);
         if (!response.ok) throw new Error('Failed to fetch recipes');
         const recipes = await response.json();
-        displayRecipes(recipes);
+        displayRecipes(recipes); // Display filtered recipes
     } catch (error) {
         console.error("Error searching recipes:", error);
         alert('Failed to load recipes. Please try again.');
     }
 }
 
-// Reset Filters
+// 9. Reset Filters to default values
 function resetFilters() {
     document.getElementById('searchBar').value = '';
     document.getElementById('ingredientFilter').value = '';
@@ -110,7 +113,7 @@ function resetFilters() {
     document.getElementById('categoryFilter').selectedIndex = 0;
 }
 
-// Display Recipes
+// 10. Display Recipes on the page
 function displayRecipes(recipes) {
     const container = document.getElementById('recipeResults');
     
@@ -140,7 +143,7 @@ function displayRecipes(recipes) {
     `;
 }
 
-// adding external api to favourites
+// 11. Add recipe to Favorites
 async function addToFavorites(recipeId, title, image) {
     console.log('Adding to favorites:', { recipeId, title, image }); // Debugging
     try {
@@ -169,15 +172,7 @@ async function addToFavorites(recipeId, title, image) {
     }
 }
 
-
-
-
-// // Hook up the search bar and button
-// document.getElementById('searchBarButton').addEventListener('click', () => {
-//     const query = document.getElementById('searchBar').value;
-//     searchRecipes(query);
-// });
-
+// 12. Fetch and display recipe details when viewing a recipe
 async function viewRecipeDetails(recipeId) {
     try {
         const response = await fetch(`/api/recipe/${recipeId}`);
@@ -191,6 +186,7 @@ async function viewRecipeDetails(recipeId) {
     }
 }
 
+// 13. Display recipe details
 function displayRecipeDetails(recipe) {
     const container = document.getElementById('recipeDetails');
     container.innerHTML = `
@@ -210,6 +206,7 @@ function displayRecipeDetails(recipe) {
     `;
 }
 
+// 14. Check if user is logged in and show appropriate links
 document.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = true; // Replace this with actual session validation
     const createRecipeLink = document.getElementById('create-recipe-link');
@@ -220,10 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// 15. Fetch login status from server and update navigation links accordingly
 document.addEventListener('DOMContentLoaded', () => {
-    // Make an API call to check if the user is logged in
     fetch('/check-login-status', {
-        method: 'GET', // Send a GET request to check login status
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -236,68 +233,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const logoutLink = document.getElementById('logout-link');
         const createRecipeLink = document.getElementById('create-recipe-link');
 
-        // Check if the user is logged in based on the response from the backend
-        const isLoggedIn = data.loggedIn; // Expecting a response like { loggedIn: true }
+        const isLoggedIn = data.loggedIn;
 
         if (isLoggedIn) {
-            // Hide login and register links
             loginLink.style.display = 'none';
             registerLink.style.display = 'none';
-
-            // Show dashboard, logout, and create recipe links
             dashboardLink.style.display = 'block';
             logoutLink.style.display = 'block';
             createRecipeLink.style.display = 'block';
         } else {
-            // If the user is not logged in, show login and register links
             loginLink.style.display = 'block';
             registerLink.style.display = 'block';
-
-            // Hide dashboard, logout, and create recipe links
-            dashboardLink.style.display = 'none';
-            logoutLink.style.display = 'none';
-            createRecipeLink.style.display = 'none';
-        }
-    })
-    .catch((error) => {
-        console.error('Error checking login status:', error);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Make an API call to check if the user is logged in
-    fetch('/check-login-status', {
-        method: 'GET', // Send a GET request to check login status
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        const loginLink = document.getElementById('login-link');
-        const registerLink = document.getElementById('register-link');
-        const dashboardLink = document.getElementById('dashboard-link');
-        const logoutLink = document.getElementById('logout-link');
-        const createRecipeLink = document.getElementById('create-recipe-link');
-
-        // Check if the user is logged in based on the response from the backend
-        const isLoggedIn = data.loggedIn; // Expecting a response like { loggedIn: true }
-
-        if (isLoggedIn) {
-            // Hide login and register links
-            loginLink.style.display = 'none';
-            registerLink.style.display = 'none';
-
-            // Show dashboard, logout, and create recipe links
-            dashboardLink.style.display = 'block';
-            logoutLink.style.display = 'block';
-            createRecipeLink.style.display = 'block';
-        } else {
-            // If the user is not logged in, show login and register links
-            loginLink.style.display = 'block';
-            registerLink.style.display = 'block';
-
-            // Hide dashboard, logout, and create recipe links
             dashboardLink.style.display = 'none';
             logoutLink.style.display = 'none';
             createRecipeLink.style.display = 'none';

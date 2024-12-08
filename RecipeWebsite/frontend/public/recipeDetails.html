@@ -1,42 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/recipeDetails.css">
-    <link rel="icon" href="/images/andyjay.png" type="image/png">
 
+    <!-- Summary:
+    This HTML file provides the structure for the "Recipe Details" page of the Recipe Website.
+    It is designed to display information about a specific recipe. The page includes a navigation bar,
+    a header, and a main content section for displaying recipe details. Styling is achieved with Bootstrap
+    and custom CSS. JavaScript is used for dynamic rendering of recipe details.
+
+    Author: [Andrea Luca - C22390831]
+    Date: [20/11/24] - [06/12/24]
+    -->
+
+    <!-- Bootstrap CSS for layout and responsiveness -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom main CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- Custom recipe details-specific CSS -->
+    <link rel="stylesheet" href="/css/recipeDetails.css">
+    <!-- Logo for the page -->
+    <link rel="icon" href="/images/andyjay.png" type="image/png">
 </head>
+
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+            <!-- Logo linking back to the homepage -->
             <a class="navbar-brand" href="index.html">
                 <img src="/images/andyjay.png" alt="Recipe Website Logo" style="height: 60px; border-radius: 35px;">
             </a>
         </div>
     </nav>
+
+    <!-- Header Section -->
     <header class="bg-primary text-white text-center py-5">
         <div class="container">
-            <h1 class="display-4">Recipe Details </h1>
-            <p class="lead">Read about this delicious recipes!</p>
+            <h1 class="display-4">Recipe Details</h1>
+            <p class="lead">Read about this delicious recipe!</p>
         </div>
     </header>
 
+    <!-- Main Content Section -->
     <div class="container content-container">
+        <!-- Back button for navigation -->
         <button onclick="history.back()" class="btn btn-secondary btn-back">← Back to Recipes</button>
 
+        <!-- Recipe Details Card -->
         <div id="recipeDetails" class="card">
+            <!-- Placeholder for dynamically loaded recipe title -->
             <h1 class="text-center" id="recipeTitle">Recipe Details</h1>
         </div>
     </div>
 
+    <!-- Footer Section -->
     <footer class="bg-dark text-white text-center py-3">
         <p>&copy; 2024 Recipe Website | All Rights Reserved</p>
     </footer>
 
+    <!-- Custom JavaScript for fetching and displaying recipe details -->
     <script src="/js/recipeDetails.js"></script>
 </body>
+
 </html>

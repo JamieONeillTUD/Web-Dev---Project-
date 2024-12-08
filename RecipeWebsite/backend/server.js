@@ -1,3 +1,16 @@
+// server.js
+// This file serves as the backend for the Recipe Website. It is responsible for handling user authentication, 
+// serving various routes like user dashboard, recipe creation, and favorites management. It connects to a MySQL 
+// database for storing user data, recipes, and favorites. Additionally, it uses the `express-session` middleware 
+// for session management to track the user's login state. 
+// This file is the entry point for the server, meaning it listens for HTTP requests, processes them, 
+// and serves the appropriate responses, including rendering dynamic content (e.g., user dashboard, recipes, and favorites).
+
+// The dashboard HTML is included within this file dynamically, because the user’s dashboard content 
+// (recipes, favorites, and user details) is specific to the logged-in user. 
+// This approach allows the server to customize the HTML content based on user data in real-time, 
+// rather than serving static HTML files for each user.
+
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
