@@ -93,6 +93,7 @@ section.container {
     margin-bottom: 15px; /* Space below the text */
 }
 
+
 /* Buttons */
 .btn-primary {
     background-color: #FF6700; /* Orange background for primary button */
@@ -102,6 +103,19 @@ section.container {
     transition: background-color 0.3s ease; /* Smooth color transition on hover */
 }
 
+/* Primary Button (View Recipe Details) */
+.btn-primary {
+    background-color: #FF6700;  /* Orange color */
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #E05D00;  /* Slightly darker on hover */
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Add to Favorites) */
 .btn-secondary {
     background-color: #F5F5DC; /* Beige background for secondary button */
     border-color: #F5F5DC; /* Match border with background */
@@ -121,6 +135,7 @@ section.container {
     color: #000; /* Darker text on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
 }
+
 
 /* Text Box Styling */
 .text-box {
