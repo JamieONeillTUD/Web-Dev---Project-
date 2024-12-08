@@ -7,10 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login - Recipe Website</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- 
+    Summary:
+    This HTML file is for the login page of the Recipe Website. It provides a form where users can input their email and password to log in.
+    The page includes a navigation bar, a header section, a login form, and a footer. 
+    The page is styled with Bootstrap and a custom CSS file. The navbar contains links to the home page, login page, and sign-up page.
+    Author: [Jamie O'Neill C22320301]
+    Date: [08/12/24]
+    -->
+
+    <!-- Bootstrap CSS for responsive design and pre-styled components -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Custom CSS -->
+    <!-- Link to custom CSS for additional styling -->
     <link rel="stylesheet" href="/css/main.css">
+    <!-- Logo for the page -->
     <link rel="icon" href="/images/andyjay.png" type="image/png">
 
 </head>
@@ -19,20 +29,26 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
+            <!-- Logo with a circular border -->
             <a class="navbar-brand" href="index.html">
                 <img src="/images/andyjay.png" alt="Recipe Website Logo" style="height: 60px; border-radius: 35px;">
             </a>
+            <!-- Button for toggling the navbar in small screens -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Collapsible navigation links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <!-- Link to the home page -->
                     <li class="nav-item">
                         <a class="nav-link active" href="index.html">Home</a>
                     </li>
+                    <!-- Link to the login page -->
                     <li class="nav-item">
                         <a class="nav-link" href="login.html">Login</a>
                     </li>
+                    <!-- Link to the sign-up page -->
                     <li class="nav-item">
                         <a class="nav-link" href="register.html">Sign Up</a>
                     </li>
@@ -40,29 +56,38 @@
             </div>
         </div>
     </nav>
+
+    <!-- Header Section -->
     <header class="bg-primary text-white text-center py-5">
         <div class="container">
+            <!-- Page title -->
             <h1 class="display-4">Login to Recipe Website</h1>
+            <!-- Subtitle with a brief description -->
             <p class="lead">Please enter your credentials to login and start browsing recipes!</p>
         </div>
     </header>
 
     <!-- Login Form Section -->
     <section class="container py-5">
+        <!-- Form title -->
         <h2 class="text-center mb-4">Login</h2>
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <!-- Login form -->
                 <form action="/login" method="POST">
+                    <!-- Email input field -->
                     <div class="form-group mb-3">
                         <label for="email">Email:</label>
                         <input type="email" id="email" name="email" class="form-control" required>
                     </div>
 
+                    <!-- Password input field -->
                     <div class="form-group mb-3">
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
 
+                    <!-- Submit button -->
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
@@ -76,18 +101,11 @@
         <p>&copy; 2024 Recipe Website | All Rights Reserved</p>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" crossorigin="anonymous">
+    <!-- Bootstrap JS for dynamic components like the navbar -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <!-- Link to custom JavaScript for login-specific behavior -->
+    <script src="/js/login.js"></script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            if (params.has('error')) {
-                const errorMessage = document.getElementById('error-message');
-                errorMessage.textContent = params.get('error');
-                errorMessage.style.display = 'block';
-            }
-        });
-    </script>
 </body>
 
 </html>

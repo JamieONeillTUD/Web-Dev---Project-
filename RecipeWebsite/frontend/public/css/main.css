@@ -91,9 +91,24 @@ section.container {
     transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #FFA500;
-    border-color: #FFA500;
+.btn-secondary {
+    background-color: #F5F5DC; /* Beige background color */
+    border-color: #F5F5DC; /* Match border color */
+    border-radius: 10px; /* Slightly curved edges */
+    padding: 5px 15px; /* Smaller padding for a smaller button */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    color: #333; /* Dark text for contrast */
+    font-size: 0.875rem; /* Slightly smaller font size */
+    font-weight: bold;
+    text-transform: capitalize; /* Capitalize text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.btn-secondary:hover {
+    background-color: #E0E0C7; /* Slightly darker beige on hover */
+    border-color: #E0E0C7; /* Match hover border */
+    color: #000; /* Darker text on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
 }
 
 /* Text Box Styling */

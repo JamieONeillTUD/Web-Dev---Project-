@@ -219,3 +219,91 @@ document.addEventListener('DOMContentLoaded', () => {
         createRecipeLink.style.display = 'none';
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Make an API call to check if the user is logged in
+    fetch('/check-login-status', {
+        method: 'GET', // Send a GET request to check login status
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        const loginLink = document.getElementById('login-link');
+        const registerLink = document.getElementById('register-link');
+        const dashboardLink = document.getElementById('dashboard-link');
+        const logoutLink = document.getElementById('logout-link');
+        const createRecipeLink = document.getElementById('create-recipe-link');
+
+        // Check if the user is logged in based on the response from the backend
+        const isLoggedIn = data.loggedIn; // Expecting a response like { loggedIn: true }
+
+        if (isLoggedIn) {
+            // Hide login and register links
+            loginLink.style.display = 'none';
+            registerLink.style.display = 'none';
+
+            // Show dashboard, logout, and create recipe links
+            dashboardLink.style.display = 'block';
+            logoutLink.style.display = 'block';
+            createRecipeLink.style.display = 'block';
+        } else {
+            // If the user is not logged in, show login and register links
+            loginLink.style.display = 'block';
+            registerLink.style.display = 'block';
+
+            // Hide dashboard, logout, and create recipe links
+            dashboardLink.style.display = 'none';
+            logoutLink.style.display = 'none';
+            createRecipeLink.style.display = 'none';
+        }
+    })
+    .catch((error) => {
+        console.error('Error checking login status:', error);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Make an API call to check if the user is logged in
+    fetch('/check-login-status', {
+        method: 'GET', // Send a GET request to check login status
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        const loginLink = document.getElementById('login-link');
+        const registerLink = document.getElementById('register-link');
+        const dashboardLink = document.getElementById('dashboard-link');
+        const logoutLink = document.getElementById('logout-link');
+        const createRecipeLink = document.getElementById('create-recipe-link');
+
+        // Check if the user is logged in based on the response from the backend
+        const isLoggedIn = data.loggedIn; // Expecting a response like { loggedIn: true }
+
+        if (isLoggedIn) {
+            // Hide login and register links
+            loginLink.style.display = 'none';
+            registerLink.style.display = 'none';
+
+            // Show dashboard, logout, and create recipe links
+            dashboardLink.style.display = 'block';
+            logoutLink.style.display = 'block';
+            createRecipeLink.style.display = 'block';
+        } else {
+            // If the user is not logged in, show login and register links
+            loginLink.style.display = 'block';
+            registerLink.style.display = 'block';
+
+            // Hide dashboard, logout, and create recipe links
+            dashboardLink.style.display = 'none';
+            logoutLink.style.display = 'none';
+            createRecipeLink.style.display = 'none';
+        }
+    })
+    .catch((error) => {
+        console.error('Error checking login status:', error);
+    });
+});
