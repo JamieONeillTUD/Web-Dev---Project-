@@ -1,3 +1,11 @@
+const express = require('express');
+const path = require('path');
+const mysql = require('mysql2');
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const app = express();
+const port = 5050;
+
 // server.js
 // This file serves as the backend for the Recipe Website. It is responsible for handling user authentication, 
 // serving various routes like user dashboard, recipe creation, and favorites management. It connects to a MySQL 
@@ -10,14 +18,6 @@
 // (recipes, favorites, and user details) is specific to the logged-in user. 
 // This approach allows the server to customize the HTML content based on user data in real-time, 
 // rather than serving static HTML files for each user.
-
-const express = require('express');
-const path = require('path');
-const mysql = require('mysql2');
-const bcrypt = require('bcryptjs');
-const session = require('express-session');
-const app = express();
-const port = 5050;
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
