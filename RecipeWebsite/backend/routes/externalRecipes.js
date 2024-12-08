@@ -35,4 +35,50 @@ router.get('/recipe/:id', async (req, res) => {
     }
 });
 
+// Cuisines Route
+router.get('/cuisines', async (req, res) => {
+    try {
+        const response = await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?a=list');
+        res.json(response.data.meals || []);
+    } catch (error) {
+        console.error("Error fetching cuisines:", error);
+        res.status(500).json({ message: "Error fetching cuisines" });
+    }
+});
+
+// Categories Route
+router.get('/categories', async (req, res) => {
+    try {
+        const response = await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+        res.json(response.data.meals || []);
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        res.status(500).json({ message: "Error fetching categories" });
+    }
+});
+
+// Search with filters or return default recipes
+router.get('/search', async (req, res) => {
+    const { q, ingredient, cuisine, category } = req.query;
+    let url = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+
+    if (q) {
+        url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${q}`;
+    } else if (ingredient) {
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+    } else if (cuisine) {
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${cuisine}`;
+    } else if (category) {
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+    }
+
+    try {
+        const response = await axios.get(url);
+        res.json(response.data.meals || []);
+    } catch (error) {
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ message: "Error searching recipes" });
+    }
+});
+
 module.exports = router;

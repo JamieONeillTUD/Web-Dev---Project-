@@ -24,33 +24,80 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('active');
         });
     });
+
+    loadFilterOptions(); // Load filters on page load
+    applyDefaultRecipes(); // Load default recipes on page load
+    document.getElementById('searchButton').addEventListener('click', applyFilters); 
+    document.getElementById('searchBar').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') applyFilters(); 
+    });
 });
 
-async function searchRecipes() {
-    const query = document.getElementById('searchBar').value;
-
+// Load Filter Options
+async function loadFilterOptions() {
     try {
-        const response = await fetch(`/api/recipes?q=${query}`);
-        if (!response.ok) throw new Error('Failed to fetch recipes');
+        const cuisines = await fetch('/api/cuisines').then(res => res.json());
+        const categories = await fetch('/api/categories').then(res => res.json());
 
+        populateDropdown('cuisineFilter', cuisines, 'strArea');
+        populateDropdown('categoryFilter', categories, 'strCategory');
+    } catch (error) {
+        console.error("Error loading filter options:", error);
+    }
+}
+
+// Populate Dropdown
+function populateDropdown(elementId, items, key) {
+    const select = document.getElementById(elementId);
+    select.innerHTML = `<option value="">Any</option>`;
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item[key];
+        option.textContent = item[key];
+        select.appendChild(option);
+    });
+}
+
+// Load Default Recipes on Page Load
+async function applyDefaultRecipes() {
+    try {
+        const response = await fetch('/api/search');  // Default search without filters
         const recipes = await response.json();
         displayRecipes(recipes);
     } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error("Error loading default recipes:", error);
+    }
+}
+
+// Apply Filters
+async function applyFilters() {
+    const query = document.getElementById('searchBar').value.trim();
+    const ingredient = document.getElementById('ingredientFilter').value.trim();
+    const cuisine = document.getElementById('cuisineFilter').value;
+    const category = document.getElementById('categoryFilter').value;
+
+    const queryParams = new URLSearchParams({ q: query, ingredient, cuisine, category }).toString();
+
+    try {
+        const response = await fetch(`/api/search?${queryParams}`);
+        if (!response.ok) throw new Error('Failed to fetch recipes');
+        
+        const recipes = await response.json();
+        displayRecipes(recipes);
+    } catch (error) {
+        console.error("Error searching recipes:", error);
         alert('Failed to load recipes. Please try again.');
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Fetch and display default recipes on page load
-    fetch('/api/recipes') // No query provided for default recipes
-        .then(response => response.json())
-        .then(recipes => displayRecipes(recipes))
-        .catch(error => console.error('Error fetching default recipes:', error));
-});
-
+// Display Recipes
 function displayRecipes(recipes) {
     const container = document.getElementById('recipeResults');
+    
+    if (!recipes || recipes.length === 0) {
+        container.innerHTML = `<p class="text-center text-danger">No recipes found. Try different filters!</p>`;
+        return;
+    }
 
     container.innerHTML = `
         <section class="container py-5">
@@ -62,12 +109,8 @@ function displayRecipes(recipes) {
                             <img src="${recipe.strMealThumb}" class="card-img-top" alt="${recipe.strMeal}">
                             <div class="card-body">
                                 <h5 class="card-title">${recipe.strMeal}</h5>
-                                <p class="card-text">${recipe.strInstructions.substring(0, 100)}...</p>
                                 <a href="recipeDetails.html?id=${recipe.idMeal}" class="btn btn-primary">View Recipe Details</a>
-                                <!-- Add to Favorites Button -->
-                                <form onsubmit="event.preventDefault(); addToFavorites(${recipe.idMeal}, '${recipe.strMeal}', '${recipe.strMealThumb}');">
-                                    <button type="submit" class="btn btn-secondary">Add to Favorites</button>
-                                </form>
+                                <button class="btn btn-secondary mt-2" onclick="addToFavorites(${recipe.idMeal}, '${recipe.strMeal}', '${recipe.strMealThumb}')">Add to Favorites</button>
                             </div>
                         </div>
                     </div>
