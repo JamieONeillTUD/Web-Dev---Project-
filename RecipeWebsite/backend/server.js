@@ -61,6 +61,9 @@ app.get('/recipeDetails.html', (req, res) => {
 
 const recipeController = require('./controllers/recipeController');
 app.post('/recipes/favorites', recipeController.addFavorite);
+app.get('/recipes/favorites', recipeController.getFavorites);
+// Register the DELETE route using the controller
+app.delete('/recipes/favorites/:id', recipeController.removeFavorite);
 
 
 // Serve HTML files
@@ -225,6 +228,7 @@ app.get('/user/dashboard', (req, res) => {
 
                         </head>
                         <body>
+                        <script src="/js/favorites.js" defer></script> 
                         <!-- Navigation Bar -->
                             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                                 <div class="container-fluid">
@@ -292,18 +296,21 @@ app.get('/user/dashboard', (req, res) => {
                                 <h3>Your Favorites</h3>
                                 <div class="row">
                                     ${favorites.map(fav => `
-                                        <div class="col-md-4">
+                                        <div id="favorite-${fav.id}" class="col-md-4">
                                             <div class="card">
                                                 <img src="${fav.image}" class="card-img-top" alt="${fav.title}">
                                                 <div class="card-body">
                                                     <h5 class="card-title">${fav.title}</h5>
                                                     <a href="http://localhost:5050/recipeDetails.html?id=${fav.id}" class="btn btn-primary">View Details</a>
+                                                    <button class="btn btn-danger mt-2" onclick="removeFromFavorites(${fav.id})">Remove</button>
                                                 </div>
                                             </div>
                                         </div>
                                     `).join('')}
+
                                 </div>
                             </div>
+                            
                             <script>
                                 document.getElementById('updateProfileForm').addEventListener('submit', async (event) => {
                                     event.preventDefault();
@@ -343,7 +350,9 @@ app.get('/user/dashboard', (req, res) => {
                                     }
                                 }
                             }
-                            </script>
+                                
+
+                        </script>
                         </body>
                         </html>
                     `);

@@ -147,6 +147,8 @@ exports.removeFavorite = async (req, res) => {
     const recipeId = req.params.id;
     const userId = req.session.userId;
 
+    console.log(`Attempting to delete: Recipe ID = ${recipeId}, User ID = ${userId}`); // Debugging
+
     if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -154,6 +156,8 @@ exports.removeFavorite = async (req, res) => {
     try {
         const query = 'DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?';
         const [result] = await db.query(query, [userId, recipeId]);
+
+        console.log(`Deletion Result: ${JSON.stringify(result)}`); // Debugging
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Favorite not found' });
@@ -165,3 +169,4 @@ exports.removeFavorite = async (req, res) => {
         res.status(500).json({ error: 'Error removing favorite' });
     }
 };
+
